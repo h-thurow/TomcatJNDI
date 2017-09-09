@@ -32,6 +32,7 @@ public class TomcatJndiTest {
     @After
     public void tearDown() throws Exception {
         tomcatJNDI.tearDown();
+        System.clearProperty("catalina.base");
     }
 
     @Test
@@ -227,15 +228,9 @@ public class TomcatJndiTest {
     }
 
     @Test
-    public void serverXml() throws Exception {
-        tomcatJNDI.processServerXml(new File("src/test/resources/serverXml/server.xml"));
-//        InitialContext ic = new InitialContext();
-//        ic.lookup()
-    }
-
-    @Test
     public void resourceLink() throws Exception {
-        tomcatJNDI.processServerXml(new File("src/test/resources/serverXml/server.xml"));
+        System.setProperty("catalina.base", "src/test/resources/serverXml");
+        tomcatJNDI.processServerXml(new File("src/test/resources/serverXml/conf/server.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/resourceLink-userDatabase.xml"));
         InitialContext ic = new InitialContext();
         MemoryUserDatabase userDatabase = (MemoryUserDatabase) ic.lookup("java:comp/env/userDatabase");
