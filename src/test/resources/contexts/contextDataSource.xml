@@ -1,0 +1,17 @@
+<Context>
+    <Resource
+            name="jdbc/Sybase"
+            auth="Container"
+            type="javax.sql.DataSource"
+            removeAbandoned="true"
+            removeAbandonedTimeout="30"
+            logAbandoned="true"
+            maxActive="1"
+            maxIdle="1"
+            maxWait="10000"
+            username="dbcp"
+            password="wotpert"
+            driverClassName="com.sybase.jdbc4.jdbc.SybDriver"
+            connectionProperties="charset=utf8;"
+            url="jdbc:sybase:Tds:b-sonar-omcdb.berlin.six.de:5000"/>
+</Context>

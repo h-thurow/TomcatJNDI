@@ -1,0 +1,8 @@
+<Context>
+    <!-- name und type werden in org.apache.catalina.deploy.NamingResources#addResource(resource : ContextResource) erwartet. -->
+    <Resource
+            auth="Container"
+            factory="resources.SelfDefinedResourceFactory"
+            type="resources.SelfDefinedResource"
+            name="my/resource" />
+</Context>

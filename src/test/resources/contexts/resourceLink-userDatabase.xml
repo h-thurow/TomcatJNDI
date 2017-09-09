@@ -1,0 +1,5 @@
+<Context>
+    <ResourceLink name="userDatabase"
+                  global="UserDatabase"
+                  type="org.apache.catalina.UserDatabase" />
+</Context>

@@ -1,0 +1,4 @@
+<Context>
+    <Environment name="myInt" value="5"
+                 type="java.lang.Integer" override="true"/>
+</Context>
