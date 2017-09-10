@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import resources.ResourceEnvRef;
 import resources.SelfDefinedResource;
 
 import javax.naming.*;
@@ -51,11 +52,40 @@ public class TomcatJndiTest {
     }
 
     @Test
-    public void dataSource() throws Exception {
+    public void dataSourceInContext() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextDataSource.xml"));
         InitialContext ctx = new InitialContext();
         DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Sybase");
         Assert.assertNotNull(ds);
+    }
+
+    @Test
+    public void resourceEnvRef() throws Exception {
+        tomcatJNDI.processContextXml(new File("src/test/resources/resource-env-ref/context.xml"));
+        tomcatJNDI.processWebXml(new File("src/test/resources/resource-env-ref/web.xml"));
+        InitialContext ic = new InitialContext();
+        ResourceEnvRef resourceEnvRef = (ResourceEnvRef) ic.lookup("java:comp/env/bean/ResourceEnvRef");
+        assertNotNull(resourceEnvRef);
+        assertEquals("TomcatJNDI", resourceEnvRef.getSomeString());
+    }
+
+    /**
+     * &lt;Parameter name="googleMapsKey" value="..." override="false"/> in real_context.xml resulted in
+     * <pre>
+     * SEVERE: End event threw exception
+     java.lang.NoSuchMethodException: org.apache.catalina.deploy.NamingResources addApplicationParameter
+     * </pre>
+     */
+    @Test
+    public void resourceEnvRefRealWebRealContextXml() throws Exception {
+        tomcatJNDI.processContextXml(new File("src/test/resources/resource-env-ref/real_context.xml"));
+        tomcatJNDI.processWebXml(new File("src/test/resources/resource-env-ref/real_web.xml"));
+        InitialContext ic = new InitialContext();
+        ResourceEnvRef resourceEnvRef = (ResourceEnvRef) ic.lookup("java:comp/env/bean/ResourceEnvRef");
+        assertNotNull(resourceEnvRef);
+        assertEquals("TomcatJNDI", resourceEnvRef.getSomeString());
+        String name = (String) ic.lookup("java:comp/env/logback/context-name");
+        assertEquals("opixweb", name);
     }
 
     /**
@@ -171,7 +201,7 @@ public class TomcatJndiTest {
 
     @Test
     public void webXmlEnvEntry() throws Exception {
-        tomcatJNDI.processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(5, myInt);
@@ -185,11 +215,23 @@ public class TomcatJndiTest {
      */
     @Test
     public void webXmlEnvEntryOverride() throws Exception {
-        tomcatJNDI.processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"), true);
-        tomcatJNDI.processWebXml(new File("src/test/resources/webXml/env-entry-myInt=10.xml"));
+        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=10.xml"));
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
+    }
+
+    /**
+     * Siehe {@link #webXmlEnvEntryOverride()}.
+     */
+    @Test
+    public void webXmlEnvEntryDoNotOverrideDefaultWebXml() throws Exception {
+        tomcatJNDI.processDefaultWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=10.xml"));
+        InitialContext ic = new InitialContext();
+        int myInt = (int) ic.lookup("java:comp/env/myInt");
+        Assert.assertEquals(5, myInt);
     }
 
     /**
@@ -200,7 +242,7 @@ public class TomcatJndiTest {
     @Test
     public void webXmlOverrideEnvironmentObject() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
-        tomcatJNDI.processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -212,7 +254,7 @@ public class TomcatJndiTest {
     @Test
     public void webXmlOverrideEnvironmentObject2() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10;override=true.xml"));
-        tomcatJNDI.processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(5, myInt);
@@ -220,7 +262,7 @@ public class TomcatJndiTest {
 
     @Test
     public void webXmlResourceRef() throws Exception {
-        tomcatJNDI.processWebXml(new File("src/test/resources/webXml/resource-ref.xml"));
+        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/resource-ref.xml"));
         InitialContext ic = new InitialContext();
         DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/datasource");
         Assert.assertNotNull(ds);

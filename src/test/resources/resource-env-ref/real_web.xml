@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd http://java.sun.com/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+    <listener>
+        <listener-class>ch.qos.logback.classic.selector.servlet.ContextDetachingSCL</listener-class>
+    </listener>
+    <!-- MUSS als erster opix Listener geladen werden! Sonst ist TransactionManager
+    in SuperDAO.transactionTemplate null. -->
+    <listener>
+        <listener-class>opix.web.listener.JndiEnvInitializer</listener-class>
+    </listener>
+    <listener>
+        <listener-class>opix.web.servlet.DBCPoolingListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>opix.web.session.SessionListener</listener-class>
+    </listener>
+
+    <!-- This component has a dependency on an external resource-->
+    <resource-ref>
+        <description>DB Connection Pooling</description>
+        <res-ref-name>jdbc/Sybase</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+
+    <servlet>
+        <servlet-name>eMarking</servlet-name>
+        <servlet-class>opix.web.servlet.eMarking</servlet-class>
+
+        <init-param>
+            <param-name>init_html</param-name>
+            <param-value>/apps/emarking/index.html</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>image_folder</param-name>
+            <param-value>/apps/emarking/gui/</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>conf_context_path</param-name>
+            <param-value>/emarking/</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>emarking2</param-name>
+            <param-value>/webcenter</param-value>
+        </init-param>
+
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <description>
+        </description>
+        <display-name>Generic</display-name>
+        <servlet-name>Generic</servlet-name>
+        <servlet-class>opix.web.servlet.Generic</servlet-class>
+        <init-param>
+            <param-name>templates_xmp_path</param-name>
+            <param-value>/TemplatesXML/XMPDataDisplay</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>templates_factory_path</param-name>
+            <param-value>/TemplatesXML/FactoryDataDisplay</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>general_data_path</param-name>
+            <param-value>/forAll</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>job_data_xsl_file</param-name>
+            <param-value>/JobData/xsl/transform.xsl</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>comp_data_xsl_file</param-name>
+            <param-value>/CompData/xsl/transform.xsl</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>all_data_xsl_folder</param-name>
+            <param-value>/AllData</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>basic_data_xsl_folder</param-name>
+            <param-value>/BasicData</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>exif_all_xsl_folder</param-name>
+            <param-value>/ExifAll</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>exif_basic_xsl_folder</param-name>
+            <param-value>/ExifBasic</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>iptc_xsl_folder</param-name>
+            <param-value>/IPTC</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>camera_xsl_folder</param-name>
+            <param-value>/Camera</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>structured_xsl_folder</param-name>
+            <param-value>/StructuredData</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>xsl_path</param-name>
+            <param-value>/xsl/transform.xsl</param-value>
+        </init-param>
+
+    </servlet>
+
+    <servlet>
+        <description>OpixPreview</description>
+        <display-name>Preview</display-name>
+        <servlet-name>Preview</servlet-name>
+        <servlet-class>opix.web.servlet.Preview</servlet-class>
+        <init-param>
+            <description>
+            </description>
+            <param-name>init_html</param-name>
+            <param-value>/apps/preview/index.html</param-value>
+        </init-param>
+        <init-param>
+            <description>
+            </description>
+            <param-name>conf_context_path</param-name>
+            <param-value>/preview</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <description>
+        </description>
+        <display-name>XmlBridge</display-name>
+        <servlet-name>XmlBridge</servlet-name>
+        <servlet-class>opix.web.servlet.XmlBridge</servlet-class>
+    </servlet>
+
+    <servlet>
+        <description>OpixActionServer</description>
+        <display-name>ActionServer</display-name>
+        <servlet-name>ActionServer</servlet-name>
+        <servlet-class>opix.web.servlet.ActionServer</servlet-class>
+        <init-param>
+            <param-name>init_html</param-name>
+            <param-value>/apps/actionserver/valid.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>conf_context_path</param-name>
+            <param-value>/actionserver</param-value>
+        </init-param>
+        <init-param>
+            <param-name>login_page</param-name>
+            <param-value>/apps/actionserver/index.jsp</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <display-name>SyncServerWebService</display-name>
+        <servlet-name>SyncServerWebService</servlet-name>
+        <servlet-class>opix.services.SyncServerWebService</servlet-class>
+    </servlet>
+
+    <servlet>
+        <display-name>SixOmcWebService</display-name>
+        <servlet-name>SixOmcWebService</servlet-name>
+        <servlet-class>opix.services.SixOmcWebService</servlet-class>
+    </servlet>
+
+    <servlet>
+        <description>
+        </description>
+        <display-name>MyWebCenter</display-name>
+        <servlet-name>MyWebCenter</servlet-name>
+        <servlet-class>opix.web.servlet.MyWebCenter</servlet-class>
+        <init-param>
+            <param-name>init_html</param-name>
+            <param-value>/apps/mywebcenter/valid.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>login_page</param-name>
+            <param-value>/apps/mywebcenter/index.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>conf_context_path</param-name>
+            <param-value>/mywebcenter/</param-value>
+        </init-param>
+        <init-param>
+            <param-name>wxp_path</param-name>
+            <param-value>/wxpress</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <description>
+        </description>
+        <display-name>WebExpress</display-name>
+        <servlet-name>WebExpress</servlet-name>
+        <servlet-class>opix.web.servlet.WebExpress</servlet-class>
+        <init-param>
+            <param-name>init_html</param-name>
+            <param-value>/apps/webexpress/index.html</param-value>
+        </init-param>
+        <init-param>
+            <param-name>conf_context_path</param-name>
+            <param-value>/webexpress</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <description>
+        </description>
+        <display-name>WebJob</display-name>
+        <servlet-name>WebJob</servlet-name>
+        <servlet-class>opix.web.servlet.WebJob</servlet-class>
+    </servlet>
+    <servlet>
+        <description>
+        </description>
+        <display-name>webcenter</display-name>
+        <servlet-name>webcenter</servlet-name>
+        <servlet-class>opix.web.servlet.webcenter</servlet-class>
+        <init-param>
+            <param-name>conf_context_path</param-name>
+            <param-value>/webcenter</param-value>
+        </init-param>
+
+        <!-- TODO Parameter wurde zwar ausgelesen, aber nicht verwendet.
+        Kann jetzt wahrscheinlch weg!? -->
+        <init-param>
+            <param-name>emarking_path</param-name>
+            <param-value>/emarking2</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>ema_image_folder</param-name>
+            <param-value>/apps/emarking2/</param-value>
+        </init-param>
+
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>WebExpress</servlet-name>
+        <url-pattern>/wxpress</url-pattern>
+    </servlet-mapping>
+
+    <!--
+            <servlet-mapping>
+                <servlet-name>WarehouseWebService</servlet-name>
+                <url-pattern>/services/warehouse/*</url-pattern>
+            </servlet-mapping>
+    -->
+
+    <servlet-mapping>
+        <servlet-name>SyncServerWebService</servlet-name>
+        <url-pattern>/services/syncserver/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SixOmcWebService</servlet-name>
+        <url-pattern>/services/sixomc/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>eMarking</servlet-name>
+        <url-pattern>/emarking</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Generic</servlet-name>
+        <url-pattern>/generic</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Preview</servlet-name>
+        <url-pattern>/preview</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>XmlBridge</servlet-name>
+        <url-pattern>/xmlbridge</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ActionServer</servlet-name>
+        <url-pattern>/actsrv</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MyWebCenter</servlet-name>
+        <url-pattern>/mywebcenter</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>WebJob</servlet-name>
+        <url-pattern>/webjob</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>webcenter</servlet-name>
+        <url-pattern>/webcenter</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description>Verarbeitet JsonRpcExceptions und schickt ein JSON-RPC konformes Response Objekt an den Client</description>
+        <display-name>JsonRpcExceptionResponder</display-name>
+        <servlet-name>JsonRpcExceptionResponder</servlet-name>
+        <servlet-class>opix.web.exception.JsonRpcExceptionResponder</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>JsonRpcExceptionResponder</servlet-name>
+        <url-pattern>/JsonRpcExceptionResponder</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description></description>
+        <display-name>UnknownEmarkingProcessExceptionResponder</display-name>
+        <servlet-name>UnknownEmarkingProcessExceptionResponder</servlet-name>
+        <servlet-class>opix.web.exception.UnknownEmarkingProcessExceptionResponder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UnknownEmarkingProcessExceptionResponder</servlet-name>
+        <url-pattern>/UnknownEmarkingProcessExceptionResponder</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description></description>
+        <display-name>IllegalEmailIdExceptionResponder</display-name>
+        <servlet-name>IllegalEmailIdExceptionResponder</servlet-name>
+        <servlet-class>opix.web.exception.IllegalEmailIdExceptionResponder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IllegalEmailIdExceptionResponder</servlet-name>
+        <url-pattern>/IllegalEmailIdExceptionResponder</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <display-name>Forwarder</display-name>
+        <servlet-name>Forwarder</servlet-name>
+        <servlet-class>opix.web.servlet.Forwarder</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Forwarder</servlet-name>
+        <url-pattern>/forward/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description></description>
+        <display-name>LoginApplication</display-name>
+        <servlet-name>LoginApplication</servlet-name>
+        <servlet-class>opix.web.servlet.LoginApplication</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginApplication</servlet-name>
+        <url-pattern>/LoginApplication/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TamperUser</servlet-name>
+        <servlet-class>opix.web.servlet.TamperUser</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TamperUser</servlet-name>
+        <url-pattern>/TamperUser/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GlobalTextSearch</servlet-name>
+        <servlet-class>opix.web.globalsearch.GlobalSearch</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GlobalTextSearch</servlet-name>
+        <url-pattern>/GlobalTextSearch</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>240</session-timeout>
+    </session-config>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Support</web-resource-name>
+            <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>manager</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>admin</realm-name>
+    </login-config>
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>opix.web.servlet.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>requestEncode</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>responseEncode</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>LoggerContextFilter</filter-name>
+        <filter-class>ch.qos.logback.classic.selector.servlet.LoggerContextFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoggerContextFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <error-page>
+        <exception-type>opix.web.exception.JsonRpcException</exception-type>
+        <location>/JsonRpcExceptionResponder</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/httpErrorPages/404.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>opix.blogic.emarking.UnknownEmarkingProcessException</exception-type>
+        <location>/UnknownEmarkingProcessExceptionResponder</location>
+    </error-page>
+    <error-page>
+        <exception-type>opix.web.exception.IllegalEmailIdException</exception-type>
+        <location>/IllegalEmailIdExceptionResponder</location>
+    </error-page>
+    <resource-env-ref>
+        <description>
+            Object factory for Generic JavaBean Resources.
+        </description>
+        <resource-env-ref-name>
+            bean/ResourceEnvRef
+        </resource-env-ref-name>
+        <resource-env-ref-type>
+            resources.ResourceEnvRef
+        </resource-env-ref-type>
+    </resource-env-ref>
+</web-app>

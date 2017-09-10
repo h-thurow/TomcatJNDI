@@ -9,16 +9,19 @@ import org.apache.catalina.deploy.ContextResource;
 import org.apache.catalina.deploy.NamingResources;
 import org.apache.catalina.deploy.WebXml;
 import org.apache.catalina.startup.Catalina;
-import org.apache.catalina.startup.ContextRuleSet;
 import org.apache.catalina.startup.NamingRuleSet;
 import org.apache.catalina.startup.WebRuleSet;
 import org.apache.tomcat.util.digester.Digester;
+import org.apache.tomcat.util.digester.Rule;
+import org.apache.tomcat.util.digester.Rules;
 import org.xml.sax.SAXException;
 
 import javax.naming.Context;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author Holger Thurow (thurow.h@gmail.com)
@@ -143,11 +146,17 @@ See also javax.naming.spi.NamingManager.getURLContext()
         }
     }
 
+    void _processHostWebXml(File hostWebXml) {
+        processWebXml(hostWebXml, true);
+    }
+
     /**
      * package-private for testing.
+     * TODO When to set overridable true?
+     * @param setOverrideable web.xml.default: true. conf/web.xml and WEB-INF/web.xml: false.
      */
     @SuppressWarnings("WeakerAccess")
-    void processWebXml(File hostWebXml, boolean setOverrideable) {
+    private void processWebXml(File hostWebXml, boolean setOverrideable) {
         initializeContext();
         Digester digester = new Digester();
         WebXml webXml = new WebXml();
@@ -178,10 +187,22 @@ See also javax.naming.spi.NamingManager.getURLContext()
 
     /**
      *
-     * @param webXmlFile conf/web.xml or WEB-INF/web.xml
+     * @param webXmlFile web.xml.default or WEB-INF/web.xml. Not conf/web.xml! Siehe {@link #processDefaultWebXml(File)}.
      */
     public void processWebXml(File webXmlFile) {
-        processWebXml(webXmlFile, false);
+        processWebXml(webXmlFile, true);
+    }
+
+    void _processWebXml(File webXmlFile) {
+        processWebXml(webXmlFile, true);
+    }
+
+    /**
+     *
+     * @param file conf/web.xml
+     */
+    public void processDefaultWebXml(File file) {
+        processWebXml(file, false);
     }
 
     public void tearDown() {

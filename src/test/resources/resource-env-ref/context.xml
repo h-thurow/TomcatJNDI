@@ -1,0 +1,7 @@
+<Context>
+    <Resource name="bean/ResourceEnvRef"
+              auth="Container"
+              type="resources.ResourceEnvRef"
+              factory="org.apache.naming.factory.BeanFactory"
+              someString="TomcatJNDI"/>
+</Context>

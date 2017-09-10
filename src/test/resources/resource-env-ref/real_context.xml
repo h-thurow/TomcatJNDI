@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context cookies="false" crossContext="true" debug="5" path="/opixweb" reloadable="false">
+    <Resource auth="Container" driverClassName="com.sybase.jdbc4.jdbc.SybDriver"
+              maxActive="50" maxIdle="10" maxWait="10000" name="jdbc/Sybase"
+              password="..." removeAbandoned="true" removeAbandonedTimeout="30"
+              type="javax.sql.DataSource"
+              url="jdbc:sybase:Tds:...:5000?DYNAMIC_PREPARE=true&#038;APPLICATIONNAME=opixweb"
+              username="..." validationQuery="select 1"/>
+    <Resource name="bean/ResourceEnvRef"
+              auth="Container"
+              type="resources.ResourceEnvRef"
+              factory="org.apache.naming.factory.BeanFactory"
+              someString="TomcatJNDI"/>
+    <Environment name="ActionServer" value="false"
+                 type="java.lang.Boolean" override="false"/>
+    <Environment name="WebServiceTimeout" override="false" type="java.lang.Integer"
+                 value="240"/>
+    <Environment name="JavaPersistence" value="false"
+                 type="java.lang.Boolean" override="false"/>
+    <Parameter name="googleMapsKey" value="..."
+               override="false"/>
+    <Environment name="logback/context-name" override="false" type="java.lang.String"
+                 value="opixweb"/>
+</Context>
