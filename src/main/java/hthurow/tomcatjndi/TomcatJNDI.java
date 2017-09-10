@@ -9,6 +9,7 @@ import org.apache.catalina.deploy.ContextResource;
 import org.apache.catalina.deploy.NamingResources;
 import org.apache.catalina.deploy.WebXml;
 import org.apache.catalina.startup.Catalina;
+import org.apache.catalina.startup.ContextRuleSet;
 import org.apache.catalina.startup.NamingRuleSet;
 import org.apache.catalina.startup.WebRuleSet;
 import org.apache.tomcat.util.digester.Digester;
@@ -85,7 +86,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     public void processContextXml(File contextXml) {
         initializeContext();
         Digester digester = new Digester();
-        digester.push(namingResources);
+        digester.push(standardContext);
         // Siehe org.apache.catalina.startup.ContextConfig.createContextDigester()
         NamingRuleSet namingRuleSet = new NamingRuleSet("Context/");
         ContextRuleSet contextRuleSet = new ContextRuleSet("", false);
