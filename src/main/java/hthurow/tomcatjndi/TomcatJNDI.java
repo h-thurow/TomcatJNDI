@@ -35,7 +35,6 @@ public class TomcatJNDI {
     private Server server;
     private StandardContext standardContext;
     private NamingContextListener globalNamingContextListener;
-    private NamingResources globalNamingResources;
 
     public TomcatJNDI() {
         /* See Tomcat.enableNaming()
@@ -102,6 +101,10 @@ See also javax.naming.spi.NamingManager.getURLContext()
         }
     }
 
+    /**
+     *
+     * @param serverXml conf/server.xml
+     */
     public void processServerXml(File serverXml) {
         if (server == null) {
             if (serverXml.getName().equals("server.xml")) {
@@ -112,7 +115,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
                     digester.parse(serverXml);
 
                     server = catalina.getServer();
-                    globalNamingResources = server.getGlobalNamingResources();
+                    NamingResources globalNamingResources = server.getGlobalNamingResources();
                     //            NamingContextListener globalNamingContextListener = new NamingContextListener(globalNamingResources);
                     globalNamingContextListener = new NamingContextListener();
                     globalNamingResources.addPropertyChangeListener(globalNamingContextListener);

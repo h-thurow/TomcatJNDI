@@ -269,9 +269,10 @@ public class TomcatJndiTest {
     }
 
     @Test
-    public void resourceLink() throws Exception {
-        System.setProperty("catalina.base", "src/test/resources/serverXml");
-        tomcatJNDI.processServerXml(new File("src/test/resources/serverXml/conf/server.xml"));
+    public void globalNamingResource() throws Exception {
+        // So tomcat-users.xml is to be found.
+        System.setProperty("catalina.base", "src/test/resources/GlobalNamingResources");
+        tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/conf/server.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/resourceLink-userDatabase.xml"));
         InitialContext ic = new InitialContext();
         MemoryUserDatabase userDatabase = (MemoryUserDatabase) ic.lookup("java:comp/env/userDatabase");
