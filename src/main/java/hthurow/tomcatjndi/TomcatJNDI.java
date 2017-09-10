@@ -12,13 +12,10 @@ import org.apache.catalina.startup.Catalina;
 import org.apache.catalina.startup.ContextRuleSet;
 import org.apache.catalina.startup.NamingRuleSet;
 import org.apache.catalina.startup.WebRuleSet;
-import org.apache.naming.ContextAccessController;
-import org.apache.naming.NamingContext;
 import org.apache.tomcat.util.digester.Digester;
 import org.xml.sax.SAXException;
 
 import javax.naming.Context;
-import javax.naming.NamingException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -102,31 +99,34 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     public void processServerXml(File serverXml) {
-        TomcatJNDICatalina catalina = new TomcatJNDICatalina();
-        Digester digester = catalina.getDigester();
-        digester.push(catalina);
-        try {
-            digester.parse(serverXml);
+        if (server == null) {
+            if (serverXml.getName().equals("server.xml")) {
+                TomcatJNDICatalina catalina = new TomcatJNDICatalina();
+                Digester digester = catalina.getDigester();
+                digester.push(catalina);
+                try {
+                    digester.parse(serverXml);
 
-            server = catalina.getServer();
-            globalNamingResources = server.getGlobalNamingResources();
-//            NamingContextListener globalNamingContextListener = new NamingContextListener(globalNamingResources);
-            globalNamingContextListener = new NamingContextListener();
-            globalNamingResources.addPropertyChangeListener(globalNamingContextListener);
-            globalNamingContextListener.setName("TomcatJNDIServer");
-            //ContextAccessController.setWritable("TomcatJNDIServer", server);
-            globalNamingContextListener.lifecycleEvent(new LifecycleEvent(server, Lifecycle.CONFIGURE_START_EVENT, null));
-
-            ContextResource[] resources = globalNamingResources.findResources();
-            for (ContextResource resource : resources) {
-                // TODO Diese resources dürfen nur hinzugefügt werden, wenn ein entsprechender Context/ResourceLink deklariert wurde.
-                // TODO org.apache.naming.factory.ResourceLinkFactory.globalContext setzen zur Auflösung von ResourceLink beim lookup.
-//                namingResources.addResource(resource);
+                    server = catalina.getServer();
+                    globalNamingResources = server.getGlobalNamingResources();
+                    //            NamingContextListener globalNamingContextListener = new NamingContextListener(globalNamingResources);
+                    globalNamingContextListener = new NamingContextListener();
+                    globalNamingResources.addPropertyChangeListener(globalNamingContextListener);
+                    globalNamingContextListener.setName("TomcatJNDIServer");
+                    //ContextAccessController.setWritable("TomcatJNDIServer", server);
+                    globalNamingContextListener.lifecycleEvent(new LifecycleEvent(server, Lifecycle.CONFIGURE_START_EVENT, null));
+                }
+                catch (IOException | SAXException e) {
+                    // TODO Logging
+                    e.printStackTrace();
+                }
+            }
+            else {
+                throw new RuntimeException("Not a server.xml file");
             }
         }
-        catch (IOException | SAXException e) {
-            // TODO Logging
-            e.printStackTrace();
+        else {
+            throw new RuntimeException("There can only be one server.xml");
         }
     }
 
@@ -135,6 +135,19 @@ See also javax.naming.spi.NamingManager.getURLContext()
      * @param hostWebXml web.xml.default
      */
     public void processHostWebXml(File hostWebXml) {
+        if (hostWebXml.getName().equals("web.xml.default")) {
+            processWebXml(hostWebXml, true);
+        }
+        else {
+            throw new RuntimeException("Not a web.xml.default file");
+        }
+    }
+
+    /**
+     * package-private for testing.
+     */
+    @SuppressWarnings("WeakerAccess")
+    void processWebXml(File hostWebXml, boolean setOverrideable) {
         initializeContext();
         Digester digester = new Digester();
         WebXml webXml = new WebXml();
@@ -143,7 +156,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
         webRuleSet.addRuleInstances(digester);
         try {
             digester.parse(hostWebXml);
-            addEnvironment(webXml, true);
+            addEnvironment(webXml, setOverrideable);
             Collection<ContextResource> resources = webXml.getResourceRefs().values();
             for (ContextResource resource : resources) {
                 namingResources.addResource(resource);
@@ -168,24 +181,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
      * @param webXmlFile conf/web.xml or WEB-INF/web.xml
      */
     public void processWebXml(File webXmlFile) {
-        initializeContext();
-        Digester digester = new Digester();
-        WebXml webXml = new WebXml();
-        digester.push(webXml);
-        WebRuleSet webRuleSet = new WebRuleSet();
-        webRuleSet.addRuleInstances(digester);
-        try {
-            digester.parse(webXmlFile);
-            addEnvironment(webXml, false);
-            Collection<ContextResource> resources = webXml.getResourceRefs().values();
-            for (ContextResource resource : resources) {
-                namingResources.addResource(resource);
-            }
-        }
-        catch (IOException | SAXException e) {
-            // TODO Logging
-            e.printStackTrace();
-        }
+        processWebXml(webXmlFile, false);
     }
 
     public void tearDown() {

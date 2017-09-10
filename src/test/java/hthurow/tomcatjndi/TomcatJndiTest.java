@@ -1,6 +1,5 @@
 package hthurow.tomcatjndi;
 
-import hthurow.tomcatjndi.TomcatJNDI;
 import org.apache.catalina.users.MemoryUserDatabase;
 import org.junit.After;
 import org.junit.Assert;
@@ -186,7 +185,7 @@ public class TomcatJndiTest {
      */
     @Test
     public void webXmlEnvEntryOverride() throws Exception {
-        tomcatJNDI.processHostWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI.processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"), true);
         tomcatJNDI.processWebXml(new File("src/test/resources/webXml/env-entry-myInt=10.xml"));
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
@@ -234,6 +233,7 @@ public class TomcatJndiTest {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/resourceLink-userDatabase.xml"));
         InitialContext ic = new InitialContext();
         MemoryUserDatabase userDatabase = (MemoryUserDatabase) ic.lookup("java:comp/env/userDatabase");
+        //System.out.println(userDatabase);
         assertNotNull(userDatabase);
 
     }
