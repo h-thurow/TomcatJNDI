@@ -11,10 +11,11 @@ import resources.SelfDefinedResource;
 import javax.naming.*;
 import javax.sql.DataSource;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * @author Holger Thurow (thurow.h@gmail.com)
@@ -261,23 +262,45 @@ public class TomcatJndiTest {
     }
 
     @Test
-    public void webXmlResourceRef() throws Exception {
-        tomcatJNDI._processWebXml(new File("src/test/resources/webXml/resource-ref.xml"));
-        InitialContext ic = new InitialContext();
-        DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/datasource");
-        Assert.assertNotNull(ds);
-    }
-
-    @Test
-    public void globalNamingResource() throws Exception {
+    public void globalNamingResourceUserDatabase() throws Exception {
         // So tomcat-users.xml is to be found.
-        System.setProperty("catalina.base", "src/test/resources/GlobalNamingResources");
-        tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/conf/server.xml"));
-        tomcatJNDI.processContextXml(new File("src/test/resources/contexts/resourceLink-userDatabase.xml"));
+        System.setProperty("catalina.base", "src/test/resources/GlobalNamingResources/UserDatabase");
+        tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/UserDatabase/conf/server.xml"));
+        tomcatJNDI.processContextXml(new File("src/test/resources/GlobalNamingResources/UserDatabase/context.xml"));
         InitialContext ic = new InitialContext();
         MemoryUserDatabase userDatabase = (MemoryUserDatabase) ic.lookup("java:comp/env/userDatabase");
         //System.out.println(userDatabase);
         assertNotNull(userDatabase);
 
+    }
+
+    @Test
+    public void globalDataSource() throws Exception {
+        tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/DataSource/server.xml"));
+        tomcatJNDI.processContextXml(new File("src/test/resources/GlobalNamingResources/DataSource/context.xml"));
+        InitialContext ic = new InitialContext();
+        DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/linkToGlobalDataSource");
+        assertNotNull(ds);
+        Connection connection = ds.getConnection();
+        Statement statement = connection.createStatement();
+        try {
+            statement.executeUpdate("CREATE TABLE MY_TABLE" +
+                    " (NAME VARCHAR(254))");
+            statement.executeUpdate("INSERT INTO MY_TABLE (NAME) VALUES ('test')");
+            ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM MY_TABLE");
+            resultSet.next();
+            int rows = resultSet.getInt(1);
+            assertEquals(1, rows);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (statement != null) {
+                statement.executeUpdate("DROP TABLE MY_TABLE");
+                statement.close();
+                connection.close();
+            }
+        }
     }
 }

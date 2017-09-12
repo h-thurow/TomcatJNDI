@@ -38,9 +38,22 @@
             <version>7.0.79</version>
         </dependency>
         <dependency>
+            <!-- Provides org.apache.tomcat.jdbc.pool.DataSourceFactory for org.apache.naming.factory.DataSourceLinkFactory -->
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>7.0.79</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <!-- 2.4.x: Java 8 -->
+            <version>2.3.5</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

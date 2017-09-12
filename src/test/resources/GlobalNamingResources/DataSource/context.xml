@@ -1,0 +1,9 @@
+<Context>
+    <ResourceLink
+            name="jdbc/linkToGlobalDataSource"
+            global="GlobalDataSource"
+            type="javax.sql.DataSource"
+            username="SA"
+            password=""
+            factory="org.apache.naming.factory.DataSourceLinkFactory" />
+</Context>
