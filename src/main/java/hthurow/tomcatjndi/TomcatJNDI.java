@@ -78,7 +78,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     /**
-     * Subsequent calls with different context.xml files are possible. All objects are merged in one context. Comply with the correct order: conf/context.xml > context.xml.default > META-INF/context.xml.
+     * Subsequent calls with different context.xml files are possible. All objects are merged in one context. Comply with the correct order: conf/context.xml > context.xml.default > META-INF/context.xml respectively conf/Catalina/[host_name]/[context_name].xml).
      * @see #processServerXml(File)
      */
     public void processContextXml(File contextXml) {
@@ -101,7 +101,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     /**
-     * Call sequence is: {@link #processServerXml(File)} > {@link #processContextXml(File)} > {@link #processDefaultWebXml(File)} > {@link #processHostWebXml(File)} > {@link #processWebXml(File)}. Not every method must be called, but you have to comply with the given order.
+     * Initialization sequence is: {@link #processServerXml(File)} > {@link #processContextXml(File)} > {@link #processDefaultWebXml(File)} > {@link #processHostWebXml(File)} > {@link #processWebXml(File)}. Not every method must be called, but you have to comply with the given order.
      *
      * @param serverXml conf/server.xml
      */
@@ -149,10 +149,6 @@ See also javax.naming.spi.NamingManager.getURLContext()
         else {
             throw new RuntimeException("Not a web.xml.default file");
         }
-    }
-
-    void _processHostWebXml(File hostWebXml) {
-        processWebXml(hostWebXml, true);
     }
 
     /**
