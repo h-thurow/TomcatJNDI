@@ -22,6 +22,7 @@ import java.util.Collection;
 
 /**
  * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.
+ *
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 29.07.17
  */
@@ -52,7 +53,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     private void initializeContext() {
-        // TODO null ersetzen durch Optional
+        // TODO null ersetzen durch Optional?
         if (standardContext == null) {
             standardContext = new StandardContext();
             standardContext.setName("TomcatJNDI");

@@ -1,7 +1,9 @@
 package hthurow.tomcatjndi;
 
-import com.dumbster.smtp.SimpleSmtpServer;
-import com.dumbster.smtp.SmtpMessage;
+import com.dumbster.smtp.MailMessage;
+import com.dumbster.smtp.ServerOptions;
+import com.dumbster.smtp.SmtpServer;
+import com.dumbster.smtp.SmtpServerFactory;
 import org.apache.catalina.users.MemoryUserDatabase;
 import org.junit.After;
 import org.junit.Assert;
@@ -23,7 +25,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
@@ -354,7 +355,7 @@ public class TomcatJndiTest {
 //        message.setContent("body text", "text/plain");
         message.setText("Hello World");
 
-        final SimpleSmtpServer simpleSmtpServer = SimpleSmtpServer.start(Integer.valueOf(mailSession.getProperty("mail.smtp.port")));
+        SmtpServer simpleSmtpServer = SmtpServerFactory.startServer(new ServerOptions(new String[]{mailSession.getProperty("mail.smtp.port")}));
         try {
             Transport.send(message);
         }
@@ -362,9 +363,8 @@ public class TomcatJndiTest {
             simpleSmtpServer.stop();
         }
 
-        assertTrue(simpleSmtpServer.getReceivedEmailSize() == 1);
-        Iterator emailIter = simpleSmtpServer.getReceivedEmail();
-        SmtpMessage email = (SmtpMessage) emailIter.next();
-        assertEquals("TomcatJndiTest#javaMailSession", email.getHeaderValue("Subject"));
+        assertTrue(simpleSmtpServer.getEmailCount() == 1);
+        MailMessage email = simpleSmtpServer.getMessage(0);
+        assertEquals("TomcatJndiTest#javaMailSession", email.getFirstHeaderValue("Subject"));
     }
 }
