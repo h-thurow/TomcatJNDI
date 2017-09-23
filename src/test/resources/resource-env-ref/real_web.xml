@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:web="http://java.sun.com/xml/ns/javaee"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd http://java.sun.com/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
     <listener>
         <listener-class>ch.qos.logback.classic.selector.servlet.ContextDetachingSCL</listener-class>
     </listener>
-    <!-- MUSS als erster opix Listener geladen werden! Sonst ist TransactionManager
-    in SuperDAO.transactionTemplate null. -->
     <listener>
         <listener-class>opix.web.listener.JndiEnvInitializer</listener-class>
     </listener>
@@ -20,7 +17,6 @@
         <listener-class>opix.web.session.SessionListener</listener-class>
     </listener>
 
-    <!-- This component has a dependency on an external resource-->
     <resource-ref>
         <description>DB Connection Pooling</description>
         <res-ref-name>jdbc/Sybase</res-ref-name>
@@ -244,8 +240,6 @@
             <param-value>/webcenter</param-value>
         </init-param>
 
-        <!-- TODO Parameter wurde zwar ausgelesen, aber nicht verwendet.
-        Kann jetzt wahrscheinlch weg!? -->
         <init-param>
             <param-name>emarking_path</param-name>
             <param-value>/emarking2</param-value>
@@ -262,13 +256,6 @@
         <servlet-name>WebExpress</servlet-name>
         <url-pattern>/wxpress</url-pattern>
     </servlet-mapping>
-
-    <!--
-            <servlet-mapping>
-                <servlet-name>WarehouseWebService</servlet-name>
-                <url-pattern>/services/warehouse/*</url-pattern>
-            </servlet-mapping>
-    -->
 
     <servlet-mapping>
         <servlet-name>SyncServerWebService</servlet-name>

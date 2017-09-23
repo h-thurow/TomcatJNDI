@@ -1,5 +1,7 @@
 package hthurow.tomcatjndi;
 
+import com.dumbster.smtp.SimpleSmtpServer;
+import com.dumbster.smtp.SmtpMessage;
 import org.apache.catalina.users.MemoryUserDatabase;
 import org.junit.After;
 import org.junit.Assert;
@@ -8,16 +10,26 @@ import org.junit.Test;
 import resources.ResourceEnvRef;
 import resources.SelfDefinedResource;
 
-import javax.naming.*;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.OperationNotSupportedException;
 import javax.sql.DataSource;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
 /**
+ * TODO Test bean provided as GlobalNamingResource.
+ *
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 24.07.17
  */
@@ -56,8 +68,30 @@ public class TomcatJndiTest {
     public void dataSourceInContext() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextDataSource.xml"));
         InitialContext ctx = new InitialContext();
-        DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/Sybase");
+        DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/hsqldb");
         Assert.assertNotNull(ds);
+        Connection connection = ds.getConnection();
+        Statement statement = connection.createStatement();
+        try {
+            statement.executeUpdate("CREATE TABLE MY_TABLE" +
+                    " (NAME VARCHAR(254))");
+            statement.executeUpdate("INSERT INTO MY_TABLE (NAME) VALUES ('test')");
+            ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM MY_TABLE");
+            resultSet.next();
+            int rowCount = resultSet.getInt(1);
+            assertEquals(1, rowCount);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+        finally {
+            if (statement != null) {
+                statement.executeQuery("DROP TABLE MY_TABLE");
+                statement.close();
+                connection.close();
+            }
+        }
     }
 
     @Test
@@ -153,7 +187,7 @@ public class TomcatJndiTest {
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         SelfDefinedResource selfDefinedResource = (SelfDefinedResource) ic.lookup("java:comp/env/my/resource");
-        DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/Sybase");
+        DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/hsqldb");
         Assert.assertEquals(10, myInt);
         Assert.assertNotNull(selfDefinedResource);
         Assert.assertNotNull(ds);
@@ -289,18 +323,47 @@ public class TomcatJndiTest {
             statement.executeUpdate("INSERT INTO MY_TABLE (NAME) VALUES ('test')");
             ResultSet resultSet = statement.executeQuery("SELECT count(*) FROM MY_TABLE");
             resultSet.next();
-            int rows = resultSet.getInt(1);
-            assertEquals(1, rows);
+            int rowCount = resultSet.getInt(1);
+            assertEquals(1, rowCount);
         }
         catch (Exception e) {
             e.printStackTrace();
+            throw e;
         }
         finally {
             if (statement != null) {
-                statement.executeUpdate("DROP TABLE MY_TABLE");
+                statement.executeQuery("DROP TABLE MY_TABLE");
                 statement.close();
                 connection.close();
             }
         }
+    }
+
+    @Test
+    public void javaMailSession() throws Exception {
+        tomcatJNDI.processContextXml(new File("src/test/resources/contexts/javaMailSession.xml"));
+        InitialContext context = new InitialContext();
+        Session mailSession = (Session) context.lookup("java:comp/env/mail/Session");
+        assertNotNull(mailSession);
+
+        MimeMessage message = new MimeMessage(mailSession);
+        message.setFrom();
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress("thurow.h@gmail.com"));
+        message.setSubject("TomcatJndiTest#javaMailSession");
+//        message.setContent("body text", "text/plain");
+        message.setText("Hello World");
+
+        final SimpleSmtpServer simpleSmtpServer = SimpleSmtpServer.start(Integer.valueOf(mailSession.getProperty("mail.smtp.port")));
+        try {
+            Transport.send(message);
+        }
+        finally {
+            simpleSmtpServer.stop();
+        }
+
+        assertTrue(simpleSmtpServer.getReceivedEmailSize() == 1);
+        Iterator emailIter = simpleSmtpServer.getReceivedEmail();
+        SmtpMessage email = (SmtpMessage) emailIter.next();
+        assertEquals("TomcatJndiTest#javaMailSession", email.getHeaderValue("Subject"));
     }
 }

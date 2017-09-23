@@ -1,11 +1,11 @@
 package hthurow.tomcatjndi;
 
-import org.apache.catalina.*;
+import org.apache.catalina.Context;
+import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.deploy.ContextResource;
 
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
-import java.beans.PropertyChangeEvent;
 
 /**
  * @author Holger Thurow (thurow.h@gmail.com)
@@ -27,7 +27,7 @@ public class NamingContextListener extends org.apache.catalina.core.NamingContex
 
     /**
      *
-     * Nur bei einer DataSource aufgerufen?
+     * TODO Nur bei einer DataSource aufgerufen?
      * <p>
      * Sonst "Failed to register in JMX: javax.management.RuntimeOperationsException: Object name cannot be null"
      * <pre>
@@ -48,19 +48,6 @@ public class NamingContextListener extends org.apache.catalina.core.NamingContex
                 ",class=" + resource.getType() +
                 ",name=" + quotedResourceName);
         return (name);
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent event) {
-        // TODO Aufruf mit ResourceLink behandeln.
-        try {
-            super.propertyChange(event);
-        }
-        catch (SecurityException e) {
-            // Thrown with ResourceLinks
-            System.out.println("Exception caught:");
-            e.printStackTrace();
-        }
     }
 
 }

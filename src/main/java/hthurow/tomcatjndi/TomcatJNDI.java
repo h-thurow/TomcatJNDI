@@ -13,18 +13,15 @@ import org.apache.catalina.startup.ContextRuleSet;
 import org.apache.catalina.startup.NamingRuleSet;
 import org.apache.catalina.startup.WebRuleSet;
 import org.apache.tomcat.util.digester.Digester;
-import org.apache.tomcat.util.digester.Rule;
-import org.apache.tomcat.util.digester.Rules;
 import org.xml.sax.SAXException;
 
 import javax.naming.Context;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
 /**
+ * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 29.07.17
  */

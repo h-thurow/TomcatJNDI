@@ -42,7 +42,7 @@
                   password=""
                   factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
                   driverClassName="org.hsqldb.jdbc.JDBCDriver"
-                  url="jdbc:hsqldb:file:TestDb/TestDb"
+                  url="jdbc:hsqldb:mem:TestDb/TestDb"
                   maxTotal="8"
                   maxIdle="4"
                   minIdle="1" />

@@ -32,7 +32,7 @@
             <version>7.0.79</version>
         </dependency>
         <dependency>
-            <!-- Für BasicDataSourceFactory -->
+            <!-- Provides BasicDataSourceFactory -->
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-dbcp</artifactId>
             <version>7.0.79</version>
@@ -47,6 +47,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hsqldb</groupId>
@@ -54,6 +55,18 @@
             <!-- 2.4.x: Java 8 -->
             <version>2.3.5</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>dumbster</groupId>
+            <artifactId>dumbster</artifactId>
+            <version>1.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
