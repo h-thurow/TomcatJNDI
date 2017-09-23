@@ -6,9 +6,9 @@
               type="javax.sql.DataSource"
               url="jdbc:sybase:Tds:...:5000?DYNAMIC_PREPARE=true&#038;APPLICATIONNAME=opixweb"
               username="..." validationQuery="select 1"/>
-    <Resource name="bean/ResourceEnvRef"
+    <Resource name="bean/JavaBean"
               auth="Container"
-              type="resources.ResourceEnvRef"
+              type="resources.JavaBean"
               factory="org.apache.naming.factory.BeanFactory"
               someString="TomcatJNDI"/>
     <Environment name="ActionServer" value="false"

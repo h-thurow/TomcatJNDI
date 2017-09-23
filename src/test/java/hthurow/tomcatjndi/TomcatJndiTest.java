@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import resources.ResourceEnvRef;
+import resources.JavaBean;
 import resources.SelfDefinedResource;
 
 import javax.mail.Message;
@@ -29,6 +29,7 @@ import static org.junit.Assert.*;
 
 /**
  * TODO Test bean provided as GlobalNamingResource.
+ * TODO Test all factories in org.apache.naming.factory, e. g. SendMailFactory etc.
  *
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 24.07.17
@@ -99,9 +100,9 @@ public class TomcatJndiTest {
         tomcatJNDI.processContextXml(new File("src/test/resources/resource-env-ref/context.xml"));
         tomcatJNDI.processWebXml(new File("src/test/resources/resource-env-ref/web.xml"));
         InitialContext ic = new InitialContext();
-        ResourceEnvRef resourceEnvRef = (ResourceEnvRef) ic.lookup("java:comp/env/bean/ResourceEnvRef");
-        assertNotNull(resourceEnvRef);
-        assertEquals("TomcatJNDI", resourceEnvRef.getSomeString());
+        JavaBean javaBean = (JavaBean) ic.lookup("java:comp/env/bean/JavaBean");
+        assertNotNull(javaBean);
+        assertEquals("TomcatJNDI", javaBean.getSomeString());
     }
 
     /**
@@ -116,9 +117,9 @@ public class TomcatJndiTest {
         tomcatJNDI.processContextXml(new File("src/test/resources/resource-env-ref/real_context.xml"));
         tomcatJNDI.processWebXml(new File("src/test/resources/resource-env-ref/real_web.xml"));
         InitialContext ic = new InitialContext();
-        ResourceEnvRef resourceEnvRef = (ResourceEnvRef) ic.lookup("java:comp/env/bean/ResourceEnvRef");
-        assertNotNull(resourceEnvRef);
-        assertEquals("TomcatJNDI", resourceEnvRef.getSomeString());
+        JavaBean javaBean = (JavaBean) ic.lookup("java:comp/env/bean/JavaBean");
+        assertNotNull(javaBean);
+        assertEquals("TomcatJNDI", javaBean.getSomeString());
         String name = (String) ic.lookup("java:comp/env/logback/context-name");
         assertEquals("opixweb", name);
     }

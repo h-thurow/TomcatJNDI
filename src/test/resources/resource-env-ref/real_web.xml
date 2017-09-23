@@ -435,10 +435,10 @@
             Object factory for Generic JavaBean Resources.
         </description>
         <resource-env-ref-name>
-            bean/ResourceEnvRef
+            bean/JavaBean
         </resource-env-ref-name>
         <resource-env-ref-type>
-            resources.ResourceEnvRef
+            resources.JavaBean
         </resource-env-ref-type>
     </resource-env-ref>
 </web-app>

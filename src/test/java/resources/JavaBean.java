@@ -4,7 +4,7 @@ package resources;
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 10.09.17
  */
-public class ResourceEnvRef {
+public class JavaBean {
     private String someString;
 
     public String getSomeString() {
