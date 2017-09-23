@@ -355,16 +355,16 @@ public class TomcatJndiTest {
 //        message.setContent("body text", "text/plain");
         message.setText("Hello World");
 
-        SmtpServer simpleSmtpServer = SmtpServerFactory.startServer(new ServerOptions(new String[]{mailSession.getProperty("mail.smtp.port")}));
+        SmtpServer server = SmtpServerFactory.startServer(new ServerOptions(new String[]{mailSession.getProperty("mail.smtp.port")}));
         try {
             Transport.send(message);
         }
         finally {
-            simpleSmtpServer.stop();
+            server.stop();
         }
 
-        assertTrue(simpleSmtpServer.getEmailCount() == 1);
-        MailMessage email = simpleSmtpServer.getMessage(0);
+        assertTrue(server.getEmailCount() == 1);
+        MailMessage email = server.getMessage(0);
         assertEquals("TomcatJndiTest#javaMailSession", email.getFirstHeaderValue("Subject"));
     }
 }

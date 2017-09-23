@@ -78,7 +78,8 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     /**
-     * Subsequent calls with different context.xml files are possible. All objects are merged in one context.
+     * Subsequent calls with different context.xml files are possible. All objects are merged in one context. Comply with the correct order: conf/context.xml > context.xml.default > META-INF/context.xml.
+     * @see #processServerXml(File)
      */
     public void processContextXml(File contextXml) {
         initializeContext();
@@ -100,6 +101,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     /**
+     * Call sequence is: {@link #processServerXml(File)} > {@link #processContextXml(File)} > {@link #processDefaultWebXml(File)} > {@link #processHostWebXml(File)} > {@link #processWebXml(File)}. Not every method must be called, but you have to comply with the given order.
      *
      * @param serverXml conf/server.xml
      */
@@ -138,6 +140,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     /**
      *
      * @param hostWebXml web.xml.default
+     * @see #processServerXml(File)
      */
     public void processHostWebXml(File hostWebXml) {
         if (hostWebXml.getName().equals("web.xml.default")) {
@@ -153,12 +156,10 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     /**
-     * package-private for testing.
-     * TODO When to set overridable true?
      * @param setOverrideable web.xml.default: true. conf/web.xml and WEB-INF/web.xml: false.
      */
     @SuppressWarnings("WeakerAccess")
-    private void processWebXml(File hostWebXml, boolean setOverrideable) {
+    private void processWebXml(File anyWebXml, boolean setOverrideable) {
         initializeContext();
         Digester digester = new Digester();
         WebXml webXml = new WebXml();
@@ -166,7 +167,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
         WebRuleSet webRuleSet = new WebRuleSet();
         webRuleSet.addRuleInstances(digester);
         try {
-            digester.parse(hostWebXml);
+            digester.parse(anyWebXml);
             addEnvironment(webXml, setOverrideable);
             Collection<ContextResource> resources = webXml.getResourceRefs().values();
             for (ContextResource resource : resources) {
@@ -189,7 +190,8 @@ See also javax.naming.spi.NamingManager.getURLContext()
 
     /**
      *
-     * @param webXmlFile web.xml.default or WEB-INF/web.xml. Not conf/web.xml! Siehe {@link #processDefaultWebXml(File)}.
+     * @param webXmlFile WEB-INF/web.xml.
+     * @see #processServerXml(File)
      */
     public void processWebXml(File webXmlFile) {
         processWebXml(webXmlFile, true);
@@ -202,6 +204,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     /**
      *
      * @param file conf/web.xml
+     * @see #processServerXml(File)
      */
     public void processDefaultWebXml(File file) {
         processWebXml(file, false);
