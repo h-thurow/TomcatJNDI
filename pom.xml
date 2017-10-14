@@ -80,6 +80,13 @@
             <version>1.4.4</version>
             <scope>provided</scope>
         </dependency>
+        <!-- For Tomcat's default EJB support -->
+        <dependency>
+            <groupId>org.apache.openejb</groupId>
+            <artifactId>openejb-standalone</artifactId>
+            <version>4.7.4</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>

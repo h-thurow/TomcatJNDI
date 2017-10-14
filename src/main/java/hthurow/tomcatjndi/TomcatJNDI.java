@@ -4,10 +4,7 @@ import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.Server;
 import org.apache.catalina.core.*;
-import org.apache.catalina.deploy.ContextEnvironment;
-import org.apache.catalina.deploy.ContextResource;
-import org.apache.catalina.deploy.NamingResources;
-import org.apache.catalina.deploy.WebXml;
+import org.apache.catalina.deploy.*;
 import org.apache.catalina.startup.Catalina;
 import org.apache.catalina.startup.ContextRuleSet;
 import org.apache.catalina.startup.NamingRuleSet;
@@ -19,9 +16,16 @@ import javax.naming.Context;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 /**
- * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.
+ * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.<br>
+ * TODO Ensure correct order: server.xml > context xml files > web xml files.<br>
+ * TODO LocalEjb element<br>
+ * TODO Remote EJBs<br>
+ * TODO EJB declaration in server.xml
+ * TODO Transaction
+ * TODO Web fragment support<br>
  *
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 29.07.17
@@ -168,6 +172,10 @@ See also javax.naming.spi.NamingManager.getURLContext()
             Collection<ContextResource> resources = webXml.getResourceRefs().values();
             for (ContextResource resource : resources) {
                 namingResources.addResource(resource);
+            }
+            Map<String, ContextEjb> ejbRefs = webXml.getEjbRefs();
+            for (ContextEjb contextEjb : ejbRefs.values()) {
+                namingResources.addEjb(contextEjb);
             }
         }
         catch (IOException | SAXException e) {
