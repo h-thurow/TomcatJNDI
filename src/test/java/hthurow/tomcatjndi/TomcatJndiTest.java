@@ -367,4 +367,15 @@ public class TomcatJndiTest {
         MailMessage email = server.getMessage(0);
         assertEquals("TomcatJndiTest#javaMailSession", email.getFirstHeaderValue("Subject"));
     }
+
+    @Test
+    public void globalJavaBean() throws Exception {
+        tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/JavaBean/server.xml"));
+        tomcatJNDI.processContextXml(new File("src/test/resources/GlobalNamingResources/JavaBean/context.xml"));
+        InitialContext context = new InitialContext();
+        JavaBean bean = (JavaBean) context.lookup("java:comp/env/bean/JavaBean");
+        assertNotNull(bean);
+        assertEquals("TomcatJNDI", bean.getSomeString());
+    }
+
 }
