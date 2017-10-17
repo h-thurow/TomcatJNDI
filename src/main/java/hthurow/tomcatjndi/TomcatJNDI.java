@@ -76,8 +76,6 @@ See also javax.naming.spi.NamingManager.getURLContext()
             standardEngine.setService(service);
             namingResources = new NamingResources();
             standardContext.setNamingResources(namingResources);
-//            namingResources.addPropertyChangeListener(namingContextListener);
-            //            namingContextListener = new NamingContextListener(namingResources);
             namingContextListener = new NamingContextListener();
             namingContextListener.setName("TomcatJNDI");
             namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
@@ -140,7 +138,6 @@ See also javax.naming.spi.NamingManager.getURLContext()
 
     private void initializeGlobalNamingContext() {
         NamingResources globalNamingResources = server.getGlobalNamingResources();
-        //            NamingContextListener globalNamingContextListener = new NamingContextListener(globalNamingResources);
         globalNamingContextListener = new NamingContextListener();
         globalNamingResources.addPropertyChangeListener(globalNamingContextListener);
         globalNamingContextListener.setName("TomcatJNDIServer");

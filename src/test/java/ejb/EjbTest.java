@@ -62,4 +62,16 @@ public class EjbTest {
         MyEjbClient client = (MyEjbClient) context.lookup("java:comp/env/ejb/myEjbClient");
         assertEquals("Hello", client.getInjectedEjb().sayHello());
     }
+
+    @Test
+    public void ejbInServerXmlAndContext() throws Exception {
+        tomcatJNDI.processServerXml(new File("src/test/java/ejb/ejbInServerXmlAndContext/server.xml"), "myWebApp");
+        tomcatJNDI.processContextXml(new File("src/test/java/ejb/ejbInServerXmlAndContext/context.xml"));
+        InitialContext context = new InitialContext();
+        MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
+        assertEquals("Hello", myEjb.sayHello());
+        assertTrue(myEjb.isConstructed());
+        MyEjbClient client = (MyEjbClient) context.lookup("java:comp/env/ejb/myEjbClient");
+        assertEquals("Hello", client.getInjectedEjb().sayHello());
+    }
 }
