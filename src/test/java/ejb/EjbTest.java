@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Holger Thurow (thurow.h@gmail.com)
@@ -41,11 +42,23 @@ public class EjbTest {
     }
 
     @Test
-    public void ejbLocal() throws Exception {
+    public void ejbLocalContextXml() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/java/ejb/contexts/ejbDefault.xml"));
         InitialContext context = new InitialContext();
         MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
         assertEquals("Hello", myEjb.sayHello());
+        assertTrue(myEjb.isConstructed());
+        MyEjbClient client = (MyEjbClient) context.lookup("java:comp/env/ejb/myEjbClient");
+        assertEquals("Hello", client.getInjectedEjb().sayHello());
+    }
+
+    @Test
+    public void ejbLocalServerXml() throws Exception {
+        tomcatJNDI.processServerXml(new File("src/test/java/ejb/server.xml"), "myWebApp");
+        InitialContext context = new InitialContext();
+        MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
+        assertEquals("Hello", myEjb.sayHello());
+        assertTrue(myEjb.isConstructed());
         MyEjbClient client = (MyEjbClient) context.lookup("java:comp/env/ejb/myEjbClient");
         assertEquals("Hello", client.getInjectedEjb().sayHello());
     }

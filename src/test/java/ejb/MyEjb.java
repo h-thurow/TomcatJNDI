@@ -1,5 +1,6 @@
 package ejb;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
 /**
@@ -9,10 +10,22 @@ import javax.ejb.Stateless;
 @Stateless
 public class MyEjb implements MyEjbIF {
 
+    private boolean isContructed;
+
     @Override
     public String sayHello() {
         String hello = "Hello";
         System.out.println(hello);
         return hello;
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        isContructed = true;
+    }
+
+    @Override
+    public boolean isConstructed() {
+        return isContructed;
     }
 }

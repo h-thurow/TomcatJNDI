@@ -6,4 +6,6 @@ package ejb;
  */
 public interface MyEjbIF {
     String sayHello();
+
+    boolean isConstructed();
 }

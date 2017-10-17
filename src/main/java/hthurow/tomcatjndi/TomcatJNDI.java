@@ -17,14 +17,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.<br>
  * TODO Ensure correct order: server.xml > context xml files > web xml files.<br>
- * TODO LocalEjb element<br>
+ * TODO server.xml parsing requires context name argument in case there are multiple contexts declared.<br>
  * TODO Remote EJBs<br>
- * TODO EJB declaration in server.xml
- * TODO Transaction
+ * TODO EJB declaration in server.xml<br>
+ * TODO Transaction<br>
  * TODO Web fragment support<br>
  *
  * @author Holger Thurow (thurow.h@gmail.com)
@@ -37,6 +38,10 @@ public class TomcatJNDI {
     private Server server;
     private StandardContext standardContext;
     private NamingContextListener globalNamingContextListener;
+    private String hostName;
+    private String engineName;
+    private String contextName;
+    private StandardContext contextInServerXml;
 
     public TomcatJNDI() {
         /* See Tomcat.enableNaming()
@@ -71,14 +76,17 @@ See also javax.naming.spi.NamingManager.getURLContext()
             service.setServer(server);
             standardEngine.setService(service);
             namingResources = new NamingResources();
-//            namingContextListener = new NamingContextListener(namingResources);
-            namingContextListener = new NamingContextListener();
-            namingContextListener.setName("TomcatJNDI");
             standardContext.setNamingResources(namingResources);
 //            namingResources.addPropertyChangeListener(namingContextListener);
-
-            namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
+            sendConfigureStartEventToNamingContextListener();
         }
+    }
+
+    private void sendConfigureStartEventToNamingContextListener() {
+//            namingContextListener = new NamingContextListener(namingResources);
+        namingContextListener = new NamingContextListener();
+        namingContextListener.setName("TomcatJNDI");
+        namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
     }
 
     /**
@@ -117,15 +125,9 @@ See also javax.naming.spi.NamingManager.getURLContext()
                 digester.push(catalina);
                 try {
                     digester.parse(serverXml);
-
                     server = catalina.getServer();
-                    NamingResources globalNamingResources = server.getGlobalNamingResources();
-                    //            NamingContextListener globalNamingContextListener = new NamingContextListener(globalNamingResources);
-                    globalNamingContextListener = new NamingContextListener();
-                    globalNamingResources.addPropertyChangeListener(globalNamingContextListener);
-                    globalNamingContextListener.setName("TomcatJNDIServer");
-                    //ContextAccessController.setWritable("TomcatJNDIServer", server);
-                    globalNamingContextListener.lifecycleEvent(new LifecycleEvent(server, Lifecycle.CONFIGURE_START_EVENT, null));
+                    extractContextFromServerXml();
+                    sendConfigureStartEventToGlobalNamingContextListener();
                 }
                 catch (IOException | SAXException e) {
                     // TODO Logging
@@ -138,6 +140,48 @@ See also javax.naming.spi.NamingManager.getURLContext()
         }
         else {
             throw new RuntimeException("There can only be one server.xml");
+        }
+    }
+
+    private void sendConfigureStartEventToGlobalNamingContextListener() {
+        NamingResources globalNamingResources = server.getGlobalNamingResources();
+        //            NamingContextListener globalNamingContextListener = new NamingContextListener(globalNamingResources);
+        globalNamingContextListener = new NamingContextListener();
+        globalNamingResources.addPropertyChangeListener(globalNamingContextListener);
+        globalNamingContextListener.setName("TomcatJNDIServer");
+        //ContextAccessController.setWritable("TomcatJNDIServer", server);
+        globalNamingContextListener.lifecycleEvent(new LifecycleEvent(server, Lifecycle.CONFIGURE_START_EVENT, null));
+    }
+
+    /**
+     * @see #processServerXml(File, String)
+     */
+    public void processServerXml(File serverXml, String engineName, String hostName, String contextName) {
+        Objects.requireNonNull(serverXml);
+        this.engineName = Objects.requireNonNull(engineName);
+        this.hostName = Objects.requireNonNull(hostName);
+        this.contextName = Objects.requireNonNull(contextName);
+        processServerXml(serverXml);
+    }
+
+    /**
+     * If you have declared some JNDI resources in server.xml within a Context element.
+     * Engine name defaults to "Catalina",  Host name to "localhost".
+     *
+     * @param contextName name of the context as in Context's path attribute.
+     */
+    public void processServerXml(File serverXml, String contextName) {
+        processServerXml(serverXml, "Catalina", "localhost", contextName);
+    }
+
+    private void extractContextFromServerXml() {
+        if (contextName != null) {
+            contextInServerXml = (StandardContext) server.findService("Catalina").getContainer().findChild("localhost").findChild("/" + contextName);
+            initializeContext();
+            NamingResources namingResources = contextInServerXml.getNamingResources();
+            for (ContextEjb contextEjb : namingResources.findEjbs()) {
+                this.namingResources.addEjb(contextEjb);
+            }
         }
     }
 
