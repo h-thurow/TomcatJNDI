@@ -34,14 +34,13 @@ import java.util.Objects;
 public class TomcatJNDI {
 
     private NamingResources namingResources;
-    private NamingContextListener namingContextListener;
+    private org.apache.catalina.core.NamingContextListener namingContextListener;
     private Server server;
     private StandardContext standardContext;
     private NamingContextListener globalNamingContextListener;
     private String hostName;
     private String engineName;
     private String contextName;
-    private StandardContext contextInServerXml;
 
     public TomcatJNDI() {
         /* See Tomcat.enableNaming()
@@ -78,15 +77,11 @@ See also javax.naming.spi.NamingManager.getURLContext()
             namingResources = new NamingResources();
             standardContext.setNamingResources(namingResources);
 //            namingResources.addPropertyChangeListener(namingContextListener);
-            sendConfigureStartEventToNamingContextListener();
+            //            namingContextListener = new NamingContextListener(namingResources);
+            namingContextListener = new NamingContextListener();
+            namingContextListener.setName("TomcatJNDI");
+            namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
         }
-    }
-
-    private void sendConfigureStartEventToNamingContextListener() {
-//            namingContextListener = new NamingContextListener(namingResources);
-        namingContextListener = new NamingContextListener();
-        namingContextListener.setName("TomcatJNDI");
-        namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
     }
 
     /**
@@ -126,8 +121,8 @@ See also javax.naming.spi.NamingManager.getURLContext()
                 try {
                     digester.parse(serverXml);
                     server = catalina.getServer();
-                    extractContextFromServerXml();
-                    sendConfigureStartEventToGlobalNamingContextListener();
+                    initializeGlobalNamingContext();
+                    initializeContextFromServerXml();
                 }
                 catch (IOException | SAXException e) {
                     // TODO Logging
@@ -143,7 +138,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
         }
     }
 
-    private void sendConfigureStartEventToGlobalNamingContextListener() {
+    private void initializeGlobalNamingContext() {
         NamingResources globalNamingResources = server.getGlobalNamingResources();
         //            NamingContextListener globalNamingContextListener = new NamingContextListener(globalNamingResources);
         globalNamingContextListener = new NamingContextListener();
@@ -174,14 +169,17 @@ See also javax.naming.spi.NamingManager.getURLContext()
         processServerXml(serverXml, "Catalina", "localhost", contextName);
     }
 
-    private void extractContextFromServerXml() {
+    private void initializeContextFromServerXml() {
         if (contextName != null) {
-            contextInServerXml = (StandardContext) server.findService("Catalina").getContainer().findChild("localhost").findChild("/" + contextName);
-            initializeContext();
-            NamingResources namingResources = contextInServerXml.getNamingResources();
-            for (ContextEjb contextEjb : namingResources.findEjbs()) {
-                this.namingResources.addEjb(contextEjb);
+            standardContext = (StandardContext) server.findService(engineName).getContainer().findChild(hostName).findChild("/" + contextName);
+            namingContextListener = standardContext.getNamingContextListener();
+            if (namingContextListener == null) {
+                namingContextListener = new NamingContextListener();
+                namingContextListener.setName(standardContext.getName());
             }
+            namingResources = standardContext.getNamingResources();
+            namingResources.addPropertyChangeListener(namingContextListener);
+            namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
         }
     }
 
