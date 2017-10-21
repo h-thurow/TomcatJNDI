@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="openejb remote server - start" type="BashConfigurationType" factoryName="Bash">
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="INTERPRETER_PATH" value="/bin/bash" />
+    <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+    <option name="PARENT_ENVS" value="true" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/apache-openejb-7.0.4/bin/openejb" />
+    <option name="PARAMETERS" value="start" />
+    <module name="" />
+    <envs>
+      <env name="OPENEJB_HOME" value="apache-openejb-7.0.4" />
+    </envs>
+    <method />
+  </configuration>
+</component>

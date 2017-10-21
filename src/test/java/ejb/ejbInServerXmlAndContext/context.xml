@@ -1,5 +1,0 @@
-<Context>
-    <!-- This is all on configuration to access EJBs provided with Tomcat's defaults. -->
-    <Ejb name="ejb/myEjbClient"
-         openejb.link="MyEjbClientLocalBean" />
-</Context>

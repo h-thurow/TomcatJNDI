@@ -22,9 +22,8 @@ import java.util.Objects;
 /**
  * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.<br>
  * TODO Ensure correct order: server.xml > context xml files > web xml files.<br>
- * TODO server.xml parsing requires context name argument in case there are multiple contexts declared.<br>
  * TODO Remote EJBs<br>
- * TODO EJB declaration in server.xml<br>
+ * TODO EJB declaration as GlobalNamingResource in server.xml?<br>
  * TODO Transaction<br>
  * TODO Web fragment support<br>
  *

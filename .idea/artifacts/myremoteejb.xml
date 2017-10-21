@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="myremoteejb">
+    <output-path>$PROJECT_DIR$/apache-openejb-7.0.4/apps</output-path>
+    <root id="archive" name="myremoteejb.jar" />
+  </artifact>
+</component>

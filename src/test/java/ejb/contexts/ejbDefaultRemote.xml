@@ -1,0 +1,7 @@
+<Context>
+    <Ejb name="ejb/myRemoteEjb"
+         type="Session"
+         factory="org.apache.naming.factory.OpenEjbFactory"
+         openejb.factory="org.apache.openejb.client.RemoteInitialContextFactory"
+         openejb.link="MyRemoteEjbRemote" />
+</Context>
