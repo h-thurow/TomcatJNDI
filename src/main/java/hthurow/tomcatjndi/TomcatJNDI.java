@@ -22,7 +22,6 @@ import java.util.Objects;
 /**
  * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.<br>
  * TODO Ensure correct order: server.xml > context xml files > web xml files.<br>
- * TODO Remote EJBs<br>
  * TODO EJB declaration as GlobalNamingResource in server.xml?<br>
  * TODO Transaction<br>
  * TODO Web fragment support<br>
@@ -156,8 +155,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     /**
-     * If you have declared some JNDI resources in server.xml within a Context element.
-     * Engine name defaults to "Catalina",  Host name to "localhost".
+     * If you have declared some JNDI resources in server.xml within a Context element call this method or {@link #processServerXml(File, String, String, String)}. Here Engine name defaults to "Catalina",  Host name to "localhost".
      *
      * @param contextName name of the context as in Context's path attribute.
      */
@@ -167,7 +165,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
 
     private void initializeContextFromServerXml() {
         if (contextName != null) {
-            standardContext = (StandardContext) server.findService(engineName).getContainer().findChild(hostName).findChild("/" + contextName);
+            standardContext = (StandardContext) server.findService(engineName).getContainer().findChild(hostName).findChild(contextName);
             namingContextListener = standardContext.getNamingContextListener();
             if (namingContextListener == null) {
                 namingContextListener = new NamingContextListener();

@@ -55,7 +55,7 @@ public class EjbTest {
 
     @Test
     public void ejbLocalInServerXml() throws Exception {
-        tomcatJNDI.processServerXml(new File("src/test/java/ejb/server.xml"), "myWebApp");
+        tomcatJNDI.processServerXml(new File("src/test/java/ejb/server.xml"), "/myWebApp");
         InitialContext context = new InitialContext();
         MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
         assertEquals("Hello", myEjb.sayHello());
@@ -78,7 +78,6 @@ public class EjbTest {
 
     @Test
     public void ejbRemoteInContextXml() throws Exception {
-        System.setProperty("OPENEJB_HOME", "apache-openejb-7.0.4");
         Process process = Runtime.getRuntime().exec(new String[]{"java", "-Djava.util.logging.config.file=apache-openejb-7.0.4/conf/logging.properties", "-javaagent:apache-openejb-7.0.4/lib/openejb-javaagent-7.0.4.jar", "-cp", "apache-openejb-7.0.4/lib/openejb-core-7.0.4.jar:apache-openejb-7.0.4/lib/javaee-api-7.0-1.jar", "org.apache.openejb.cli.Bootstrap", "start"});
         try {
             Thread.sleep(5000);
