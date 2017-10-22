@@ -76,6 +76,9 @@ public class EjbTest {
         assertEquals("Hello", client.getInjectedEjb().sayHello());
     }
 
+    /**
+     * Requires a sym link TomcatJNDI/apache-openejb-7.0.4 pointing to a locale OpenEJB 7.0.4 Installation. To be able to find the pid to shutdown the server after the test has run, I don't call "openejb start" as it is the correct way.
+     */
     @Test
     public void ejbRemoteInContextXml() throws Exception {
         Process process = Runtime.getRuntime().exec(new String[]{"java", "-Djava.util.logging.config.file=apache-openejb-7.0.4/conf/logging.properties", "-javaagent:apache-openejb-7.0.4/lib/openejb-javaagent-7.0.4.jar", "-cp", "apache-openejb-7.0.4/lib/openejb-core-7.0.4.jar:apache-openejb-7.0.4/lib/javaee-api-7.0-1.jar", "org.apache.openejb.cli.Bootstrap", "start"});
