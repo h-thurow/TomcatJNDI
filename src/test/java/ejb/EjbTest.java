@@ -66,8 +66,8 @@ public class EjbTest {
 
     @Test
     public void ejbLocalInServerXmlAndContextXml() throws Exception {
-        tomcatJNDI.processServerXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContext/server.xml"), "myWebApp");
-        tomcatJNDI.processContextXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContext/context.xml"));
+        tomcatJNDI.processServerXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContextXml/server.xml"), "myWebApp");
+        tomcatJNDI.processContextXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContextXml/context.xml"));
         InitialContext context = new InitialContext();
         MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
         assertEquals("Hello", myEjb.sayHello());
