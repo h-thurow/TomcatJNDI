@@ -31,11 +31,12 @@ There is one really important thing: When loading more than one configuration fi
     conf/server.xml > conf/tomcat-users.xml > conf/context.xml > conf/Catalina/localhost/context.xml.default > conf/Catalina/localhost/[context_name].xml or META-INF/context.xml > conf/web.xml > conf/Catalina/localhost/web.xml.default   > WEB-INF/web.xml
 
 
-Say you have configured some env-entry elements in WEB-INF/web.xml and a DataSource in META-INF/context.xml load context.xml before web.xml.  
-
-After you have submitted all of your configuration files you have to call
-
-    start()
+Say you have configured some env-entry elements in WEB-INF/web.xml and a DataSource in META-INF/context.xml load context.xml before web.xml:
+    
+    TomcatJNDI tomcatJNDI = new TomcatJNDI();
+    tomcatJNDI.processContextXml(contextXmlFile);
+    tomcatJNDI.processWebXml(webXmlFile);
+    tomcatJNDI.start();
 
 When using TomcatJNDI in unit tests call
 
