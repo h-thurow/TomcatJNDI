@@ -23,7 +23,7 @@ TomcatJNDI's API is simple. There are some process* Methods for the different co
 
 All these methods are well documented on the class. 
 
-You don't have to call all of these methods, just that one, appropriate for the type of file containing your configuration. From the various web.xml files only those files are required to be loaded wherein you have declared a <env-entry> element. 
+You don't have to call all of these methods, just that one, appropriate for the type of file containing your configuration. From the various web.xml files only those files are required to be loaded wherein you have declared a \<env-entry> element. 
 
 There is one really important thing: When loading more than one configuration file comply with Tomcat's load sequence:
 
@@ -55,7 +55,7 @@ after every test to clear the environment before executing the following test.
 | | Context/Environment | Boxed primitives
 | | Context/Ejb | EJB
 | | Context/Transaction | UserTransaction
-| web.xml | <env-entry> | Boxed primitives
+| web.xml | \<env-entry> | Boxed primitives
 
 
 
