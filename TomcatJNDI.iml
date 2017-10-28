@@ -23,11 +23,11 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.bitmechanic:dumbster:1.9.0.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.mail:mail:1.4.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-standalone:4.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-loader:4.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-core:4.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:mbean-annotation-api:4.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-jpa-integration:4.7.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:javaee-api:6.0-6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.commons:commons-lang3:3.3.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-api:4.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-javaagent:4.7.4" level="project" />
@@ -42,17 +42,19 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq:activemq-ra:5.10.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq:activemq-kahadb-store:5.10.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq.protobuf:activemq-protobuf:1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq:activemq-broker:5.10.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq:activemq-client:5.10.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.14" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.fusesource.hawtbuf:hawtbuf:1.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq:activemq-openwire-legacy:5.10.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq:activemq-kahadb-store:5.10.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq.protobuf:activemq-protobuf:1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.activemq:activemq-jdbc-store:5.10.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.components:geronimo-connector:3.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.specs:geronimo-j2ee-connector_1.6_spec:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.components:geronimo-transaction:3.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.specs:geronimo-j2ee-connector_1.6_spec:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.objectweb.howl:howl:1.0.1-1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:1.9.0-alpha-2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.xbean:xbean-asm5-shaded:4.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.xbean:xbean-finder-shaded:4.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.xbean:xbean-reflect:4.2" level="project" />
@@ -64,7 +66,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb.shade:quartz-openejb-shade:2.2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-jdk14:1.7.14" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.14" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openwebbeans:openwebbeans-impl:1.2.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openwebbeans:openwebbeans-spi:1.2.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openwebbeans:openwebbeans-ejb:1.2.7" level="project" />
@@ -79,8 +80,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: commons-beanutils:commons-beanutils-core:1.8.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.bval:bval-jsr303:0.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.fusesource.jansi:jansi:1.8" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:javaee-api:6.0-6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.javamail:geronimo-javamail_1.4_mail:1.9.0-alpha-2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-client:4.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-server:4.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.openejb:openejb-ejbd:4.7.4" level="project" />
