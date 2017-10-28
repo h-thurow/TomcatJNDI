@@ -4,6 +4,7 @@ import com.dumbster.smtp.MailMessage;
 import com.dumbster.smtp.ServerOptions;
 import com.dumbster.smtp.SmtpServer;
 import com.dumbster.smtp.SmtpServerFactory;
+import junit.framework.AssertionFailedError;
 import org.apache.catalina.users.MemoryUserDatabase;
 import org.junit.After;
 import org.junit.Assert;
@@ -19,6 +20,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.naming.OperationNotSupportedException;
 import javax.sql.DataSource;
 import java.io.File;
@@ -53,6 +55,7 @@ public class TomcatJndiTest {
     @Test
     public void environment() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -61,6 +64,7 @@ public class TomcatJndiTest {
     @Test
     public void selfDefinedResource() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextSelfDefinedResource.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         SelfDefinedResource selfDefinedResource = (SelfDefinedResource) ic.lookup("java:comp/env/my/resource");
         Assert.assertNotNull(selfDefinedResource);
@@ -69,6 +73,7 @@ public class TomcatJndiTest {
     @Test
     public void dataSourceInContext() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextDataSource.xml"));
+        tomcatJNDI.start();
         InitialContext ctx = new InitialContext();
         DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/hsqldb");
         Assert.assertNotNull(ds);
@@ -100,6 +105,7 @@ public class TomcatJndiTest {
     public void resourceEnvRef() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/resource-env-ref/context.xml"));
         tomcatJNDI.processWebXml(new File("src/test/resources/resource-env-ref/web.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         JavaBean javaBean = (JavaBean) ic.lookup("java:comp/env/bean/JavaBean");
         assertNotNull(javaBean);
@@ -117,6 +123,7 @@ public class TomcatJndiTest {
     public void resourceEnvRefRealWebRealContextXml() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/resource-env-ref/real_context.xml"));
         tomcatJNDI.processWebXml(new File("src/test/resources/resource-env-ref/real_web.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         JavaBean javaBean = (JavaBean) ic.lookup("java:comp/env/bean/JavaBean");
         assertNotNull(javaBean);
@@ -131,6 +138,7 @@ public class TomcatJndiTest {
     @Test(expected = OperationNotSupportedException.class)
     public void onlyReadableENC() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -140,6 +148,7 @@ public class TomcatJndiTest {
     @Test(expected = OperationNotSupportedException.class)
     public void onlyReadableENCCreateContext() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -159,6 +168,7 @@ public class TomcatJndiTest {
     @Test //(expected = OperationNotSupportedException.class)
     public void close() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -171,6 +181,7 @@ public class TomcatJndiTest {
     @Test
     public void severalJndiObjects() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextSeveralJndiObjects.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/Sybase");
@@ -185,6 +196,7 @@ public class TomcatJndiTest {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextSelfDefinedResource.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextDataSource.xml"));
+        tomcatJNDI.start();
 
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
@@ -199,6 +211,7 @@ public class TomcatJndiTest {
     public void loadSameContextXmlTwoTimes() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -211,6 +224,7 @@ public class TomcatJndiTest {
     public void overrideValue() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=5.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -220,6 +234,7 @@ public class TomcatJndiTest {
     public void overrideValue2() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10;override=true.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=5.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(5, myInt);
@@ -229,6 +244,7 @@ public class TomcatJndiTest {
     public void addToSameContext() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/contextSelfDefinedResource.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/my-myInt=5.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/my/myInt");
         SelfDefinedResource res = (SelfDefinedResource) ic.lookup("java:comp/env/my/resource");
@@ -239,6 +255,7 @@ public class TomcatJndiTest {
     @Test
     public void webXmlEnvEntry() throws Exception {
         tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(5, myInt);
@@ -254,6 +271,7 @@ public class TomcatJndiTest {
     public void webXmlEnvEntryOverride() throws Exception {
         tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
         tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=10.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -266,6 +284,7 @@ public class TomcatJndiTest {
     public void webXmlEnvEntryDoNotOverrideDefaultWebXml() throws Exception {
         tomcatJNDI.processDefaultWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
         tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=10.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(5, myInt);
@@ -280,6 +299,7 @@ public class TomcatJndiTest {
     public void webXmlOverrideEnvironmentObject() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10.xml"));
         tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(10, myInt);
@@ -292,6 +312,7 @@ public class TomcatJndiTest {
     public void webXmlOverrideEnvironmentObject2() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/myInt=10;override=true.xml"));
         tomcatJNDI._processWebXml(new File("src/test/resources/webXml/env-entry-myInt=5.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         int myInt = (int) ic.lookup("java:comp/env/myInt");
         Assert.assertEquals(5, myInt);
@@ -303,6 +324,7 @@ public class TomcatJndiTest {
         System.setProperty("catalina.base", "src/test/resources/GlobalNamingResources/UserDatabase");
         tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/UserDatabase/conf/server.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/GlobalNamingResources/UserDatabase/context.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         MemoryUserDatabase userDatabase = (MemoryUserDatabase) ic.lookup("java:comp/env/userDatabase");
         //System.out.println(userDatabase);
@@ -314,6 +336,7 @@ public class TomcatJndiTest {
     public void globalDataSource() throws Exception {
         tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/DataSource/server.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/GlobalNamingResources/DataSource/context.xml"));
+        tomcatJNDI.start();
         InitialContext ic = new InitialContext();
         DataSource ds = (DataSource) ic.lookup("java:comp/env/jdbc/linkToGlobalDataSource");
         assertNotNull(ds);
@@ -344,6 +367,7 @@ public class TomcatJndiTest {
     @Test
     public void javaMailSession() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/resources/contexts/javaMailSession.xml"));
+        tomcatJNDI.start();
         InitialContext context = new InitialContext();
         Session mailSession = (Session) context.lookup("java:comp/env/mail/Session");
         assertNotNull(mailSession);
@@ -372,10 +396,23 @@ public class TomcatJndiTest {
     public void globalJavaBean() throws Exception {
         tomcatJNDI.processServerXml(new File("src/test/resources/GlobalNamingResources/JavaBean/server.xml"));
         tomcatJNDI.processContextXml(new File("src/test/resources/GlobalNamingResources/JavaBean/context.xml"));
+        tomcatJNDI.start();
         InitialContext context = new InitialContext();
         JavaBean bean = (JavaBean) context.lookup("java:comp/env/bean/JavaBean");
         assertNotNull(bean);
         assertEquals("TomcatJNDI", bean.getSomeString());
     }
 
+    @Test
+    public void host_context_environment() throws Exception {
+        tomcatJNDI.processServerXml(new File("src/test/resources/Host/Context/Environment/server.xml"), "/myContext");
+        tomcatJNDI.start();
+        int myInt = InitialContext.doLookup("java:comp/env/Host/Context/myInt");
+        assertEquals(5, myInt);
+        try {
+            InitialContext.doLookup("java:comp/env/Host/Context2/myInt");
+            throw new AssertionFailedError("java:comp/env/Host/Context2/myInt must not exist.");
+        }
+        catch (NamingException ignored) { }
+    }
 }

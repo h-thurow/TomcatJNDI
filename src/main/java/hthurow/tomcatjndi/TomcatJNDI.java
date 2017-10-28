@@ -22,9 +22,11 @@ import java.util.Objects;
 /**
  * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.<br>
  * TODO Ensure correct order: server.xml > context xml files > web xml files.<br>
- * TODO EJB declaration as GlobalNamingResource in server.xml?<br>
- * TODO Transaction<br>
+ * TODO Host/Context/Resource<br>
+ * TODO UserTransaction<br>
+ * TODO message-destination (web.xml)<br>
  * TODO Web fragment support<br>
+ * TODO Change process*-methods to support Builder pattern?<br>
  *
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 29.07.17
@@ -59,7 +61,6 @@ See also javax.naming.spi.NamingManager.getURLContext()
     }
 
     private void initializeContext() {
-        // TODO null ersetzen durch Optional?
         if (standardContext == null) {
             standardContext = new StandardContext();
             standardContext.setName("TomcatJNDI");
@@ -76,7 +77,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
             standardContext.setNamingResources(namingResources);
             namingContextListener = new NamingContextListener();
             namingContextListener.setName("TomcatJNDI");
-            namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
+
         }
     }
 
@@ -84,7 +85,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
      * Subsequent calls with different context.xml files are possible. All objects are merged in one context. Comply with the correct order: conf/context.xml > context.xml.default > META-INF/context.xml respectively conf/Catalina/[host_name]/[context_name].xml).
      * @see #processServerXml(File)
      */
-    public void processContextXml(File contextXml) {
+    public TomcatJNDI processContextXml(File contextXml) {
         initializeContext();
         Digester digester = new Digester();
         digester.push(standardContext);
@@ -98,9 +99,9 @@ See also javax.naming.spi.NamingManager.getURLContext()
             digester.parse(contextXml);
         }
         catch (IOException | SAXException e) {
-            // TODO Logging
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+        return this;
     }
 
     /**
@@ -108,7 +109,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
      *
      * @param serverXml conf/server.xml
      */
-    public void processServerXml(File serverXml) {
+    public TomcatJNDI processServerXml(File serverXml) {
         if (server == null) {
             if (serverXml.getName().equals("server.xml")) {
                 TomcatJNDICatalina catalina = new TomcatJNDICatalina();
@@ -121,8 +122,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
                     initializeContextFromServerXml();
                 }
                 catch (IOException | SAXException e) {
-                    // TODO Logging
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
             else {
@@ -132,6 +132,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
         else {
             throw new RuntimeException("There can only be one server.xml");
         }
+        return this;
     }
 
     private void initializeGlobalNamingContext() {
@@ -146,21 +147,23 @@ See also javax.naming.spi.NamingManager.getURLContext()
     /**
      * @see #processServerXml(File, String)
      */
-    public void processServerXml(File serverXml, String engineName, String hostName, String contextName) {
+    public TomcatJNDI processServerXml(File serverXml, String engineName, String hostName, String contextName) {
         Objects.requireNonNull(serverXml);
         this.engineName = Objects.requireNonNull(engineName);
         this.hostName = Objects.requireNonNull(hostName);
         this.contextName = Objects.requireNonNull(contextName);
         processServerXml(serverXml);
+        return this;
     }
 
     /**
      * If you have declared some JNDI resources in server.xml within a Context element call this method or {@link #processServerXml(File, String, String, String)}. Here Engine name defaults to "Catalina",  Host name to "localhost".
      *
-     * @param contextName name of the context as in Context's path attribute.
+     * @param contextName name of the context as in Context's path attribute. With leading slash!
      */
-    public void processServerXml(File serverXml, String contextName) {
+    public TomcatJNDI processServerXml(File serverXml, String contextName) {
         processServerXml(serverXml, "Catalina", "localhost", contextName);
+        return this;
     }
 
     private void initializeContextFromServerXml() {
@@ -173,7 +176,6 @@ See also javax.naming.spi.NamingManager.getURLContext()
             }
             namingResources = standardContext.getNamingResources();
             namingResources.addPropertyChangeListener(namingContextListener);
-            namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
         }
     }
 
@@ -182,13 +184,14 @@ See also javax.naming.spi.NamingManager.getURLContext()
      * @param hostWebXml web.xml.default
      * @see #processServerXml(File)
      */
-    public void processHostWebXml(File hostWebXml) {
+    public TomcatJNDI processHostWebXml(File hostWebXml) {
         if (hostWebXml.getName().equals("web.xml.default")) {
             processWebXml(hostWebXml, true);
         }
         else {
             throw new RuntimeException("Not a web.xml.default file");
         }
+        return this;
     }
 
     /**
@@ -215,8 +218,7 @@ See also javax.naming.spi.NamingManager.getURLContext()
             }
         }
         catch (IOException | SAXException e) {
-            // TODO Logging
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -230,11 +232,12 @@ See also javax.naming.spi.NamingManager.getURLContext()
 
     /**
      *
-     * @param webXmlFile WEB-INF/web.xml.
+     * @param webXml WEB-INF/web.xml.
      * @see #processServerXml(File)
      */
-    public void processWebXml(File webXmlFile) {
-        processWebXml(webXmlFile, true);
+    public TomcatJNDI processWebXml(File webXml) {
+        processWebXml(webXml, true);
+        return this;
     }
 
     void _processWebXml(File webXmlFile) {
@@ -243,11 +246,16 @@ See also javax.naming.spi.NamingManager.getURLContext()
 
     /**
      *
-     * @param file conf/web.xml
+     * @param defaultWebXml conf/web.xml
      * @see #processServerXml(File)
      */
-    public void processDefaultWebXml(File file) {
-        processWebXml(file, false);
+    public TomcatJNDI processDefaultWebXml(File defaultWebXml) {
+        processWebXml(defaultWebXml, false);
+        return this;
+    }
+
+    public void start() {
+        namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
     }
 
     public void tearDown() {

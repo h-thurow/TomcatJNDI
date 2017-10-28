@@ -45,6 +45,7 @@ public class EjbTest {
     @Test
     public void ejbLocalInContextXml() throws Exception {
         tomcatJNDI.processContextXml(new File("src/test/java/ejb/contexts/ejbDefault.xml"));
+        tomcatJNDI.start();
         InitialContext context = new InitialContext();
         MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
         assertEquals("Hello", myEjb.sayHello());
@@ -56,6 +57,7 @@ public class EjbTest {
     @Test
     public void ejbLocalInServerXml() throws Exception {
         tomcatJNDI.processServerXml(new File("src/test/java/ejb/server.xml"), "/myWebApp");
+        tomcatJNDI.start();
         InitialContext context = new InitialContext();
         MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
         assertEquals("Hello", myEjb.sayHello());
@@ -68,6 +70,7 @@ public class EjbTest {
     public void ejbLocalInServerXmlAndContextXml() throws Exception {
         tomcatJNDI.processServerXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContextXml/server.xml"), "myWebApp");
         tomcatJNDI.processContextXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContextXml/context.xml"));
+        tomcatJNDI.start();
         InitialContext context = new InitialContext();
         MyEjbIF myEjb = (MyEjbIF) context.lookup("java:comp/env/ejb/myEjb");
         assertEquals("Hello", myEjb.sayHello());
@@ -85,6 +88,7 @@ public class EjbTest {
         try {
             Thread.sleep(5000);
             tomcatJNDI.processContextXml(new File("src/test/java/ejb/contexts/ejbDefaultRemote.xml"));
+            tomcatJNDI.start();
             InitialContext context = new InitialContext();
             MyRemoteEjbIF myEjb = (MyRemoteEjbIF) context.lookup("java:comp/env/ejb/myRemoteEjb");
 
