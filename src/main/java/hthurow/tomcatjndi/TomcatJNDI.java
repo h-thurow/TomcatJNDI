@@ -26,13 +26,14 @@ import java.util.Objects;
  * TODO UserTransaction<br>
  * TODO message-destination (web.xml)<br>
  * TODO Web fragment support<br>
- * TODO Change process*-methods to support Builder pattern?<br>
+ * TODO Test all factories in org.apache.naming.factory, e. g. SendMailFactory etc.
  *
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 29.07.17
  */
 public class TomcatJNDI {
 
+    private static final String URL_PKG_PREFIX = "org.apache.naming";
     private NamingResources namingResources;
     private org.apache.catalina.core.NamingContextListener namingContextListener;
     private Server server;
@@ -49,13 +50,16 @@ public static final String URL_PKG_PREFIXES = "java.naming.factory.url.pkgs"
 Constant that holds the name of the environment property for specifying the list of package prefixes to use when loading in URL context factories. The value of the property should be a colon-separated list of package prefixes for the class name of the factory class that will create a URL context factory. This property may be specified in the environment, an applet parameter, a system property, or one or more resource files. The prefix com.sun.jndi.url is always appended to the possibly empty list of package prefixes.
 The value of this constant is "java.naming.factory.url.pkgs".
 
-See also javax.naming.spi.NamingManager.getURLContext()
- */
+See also javax.naming.spi.NamingManager.getURLContext() */
         System.setProperty
                 (Context.INITIAL_CONTEXT_FACTORY,
                         "org.apache.naming.java.javaURLContextFactory");
-        // TODO Property nicht einfach überschreiben.
-        System.setProperty(Context.URL_PKG_PREFIXES, "org.apache.naming");
+
+        String urlPkgPrefixes = System.getProperty(Context.URL_PKG_PREFIXES);
+        urlPkgPrefixes =
+                urlPkgPrefixes != null ? urlPkgPrefixes + ":" + URL_PKG_PREFIX
+                                       : URL_PKG_PREFIX;
+        System.setProperty(Context.URL_PKG_PREFIXES, urlPkgPrefixes);
 
 
     }

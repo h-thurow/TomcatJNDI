@@ -68,7 +68,7 @@ public class EjbTest {
 
     @Test
     public void ejbLocalInServerXmlAndContextXml() throws Exception {
-        tomcatJNDI.processServerXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContextXml/server.xml"), "myWebApp");
+        tomcatJNDI.processServerXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContextXml/server.xml"), "/myWebApp");
         tomcatJNDI.processContextXml(new File("src/test/java/ejb/ejbLocalInServerXmlAndContextXml/context.xml"));
         tomcatJNDI.start();
         InitialContext context = new InitialContext();

@@ -27,7 +27,8 @@ public class NamingContextListener extends org.apache.catalina.core.NamingContex
 
     /**
      *
-     * TODO Nur bei einer DataSource aufgerufen?
+     * TODO Only called in case of a DataSource?
+     * TODO Reconsider building of ObjectName.
      * <p>
      * Sonst "Failed to register in JMX: javax.management.RuntimeOperationsException: Object name cannot be null"
      * <pre>

@@ -36,12 +36,14 @@
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-dbcp</artifactId>
             <version>7.0.79</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <!-- Provides org.apache.tomcat.jdbc.pool.DataSourceFactory for org.apache.naming.factory.DataSourceLinkFactory -->
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
             <version>7.0.79</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

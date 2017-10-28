@@ -31,8 +31,6 @@ import java.sql.Statement;
 import static org.junit.Assert.*;
 
 /**
- * TODO Test bean provided as GlobalNamingResource.
- * TODO Test all factories in org.apache.naming.factory, e. g. SendMailFactory etc.
  *
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 24.07.17

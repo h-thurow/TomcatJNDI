@@ -23,7 +23,7 @@ TomcatJNDI's API is simple. There are some process* Methods for the different co
 
 All these methods are well documented on the class. 
 
-You don't have to call all these methods, just that one, appropriate for the type of file containing your configuration. The different web.xml files are only required to be loaded when you have declared a <env-entry> element in one of them. 
+You don't have to call all of these methods, just that one, appropriate for the type of file containing your configuration. From the different web.xml files only those files are required to be loaded wherein you have declared a <env-entry> element. 
 
 There is one really important thing: When loading more than one configuration file comply with Tomcat's load sequence:
 
