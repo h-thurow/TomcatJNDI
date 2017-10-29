@@ -97,7 +97,7 @@ Note that you have to lookup the DataSource under "java:comp/env/...".
 | server.xml | GlobalNamingResources/Resource | DataSource, JavaBean, UserDatabase
 | | Host/Context/Environment | Boxed primitives
 | | Host/Context/Ejb | EJB
-| context.xml | Context/Resource | DataSource, JavaBean, javax.mail.Session
+| context.xml | Context/Resource | DataSource, JavaBean, JavaMail Session
 | | Context/ResourceLink | DataSource, JavaBean, UserDatabase
 | | Context/Environment | Boxed primitives
 | | Context/Ejb | EJB
