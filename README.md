@@ -54,6 +54,42 @@ When using TomcatJNDI in unit tests call
 
 after every test to clear the environment before executing the following test.
 
+### Only interested in a DataSource?
+
+Store a file named context.xml containing
+
+    <Context>
+        <Resource name="path/to/datasource"
+                  auth="Container"
+                  type="javax.sql.DataSource"
+                  username="userName"
+                  password="password"
+                  driverClassName="driverClassName"
+                  url="url" />
+    </Context>
+
+Adjust the values as appropriate for your database.
+    
+Load this additional dependency
+
+    <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>tomcat-dbcp</artifactId>
+        <version>7.0.79</version>
+    </dependency> 
+
+Let TomcatJNDI initialize the JNDI environment
+
+    TomcatJNDI tomcatJNDI = new TomcatJNDI();
+    tomcatJNDI.processContextXml(contextXmlFile);
+    tomcatJNDI.start();
+    
+Access the DataSource
+
+    DataSource ds = (DataSource) InitialContext.doLookup("java:comp/env/path/to/datasource")
+    
+Note that you have to lookup the DataSource under "java:comp/env/...".
+
 ### Known to be working so far
 
 |  | Element | Tested with |
