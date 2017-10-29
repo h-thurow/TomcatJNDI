@@ -6,7 +6,7 @@ The most common use case is the DataSouce, you configured within e. g. context.x
 
 Admittedly TomcatJNDI does less more than a little bit of configuration. All the magic comes from Tomcat's JNDI system itself.
 
-### Download
+## Download
 
     <dependency>
         <groupId>com.github.h-thurow</groupId>
@@ -16,7 +16,7 @@ Admittedly TomcatJNDI does less more than a little bit of configuration. All the
     
 or <a href=http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.h-thurow%22%20AND%20a%3A%22TomcatJNDI%22>download from here</a>.
 
-### How to use
+## How to use
 
 TomcatJNDI's API is simple. There are some process* Methods for the different configuration files:
 
@@ -54,7 +54,7 @@ When using TomcatJNDI in unit tests call
 
 after every test to clear the environment before executing the following test.
 
-### Only interested in a DataSource?
+## Only interested in a DataSource?
 
 Store a file named context.xml containing
 
@@ -90,7 +90,7 @@ Access the DataSource
     
 Note that you have to lookup the DataSource under "java:comp/env/...".
 
-### Known to be working so far
+## Known to be working so far
 
 |  | Element | Tested with |
 | :---| :---| :---|
