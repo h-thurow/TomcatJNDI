@@ -20,15 +20,15 @@ or <a href=http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.h-thuro
 
 TomcatJNDI's API is simple. There are some process* Methods for the different configuration files:
 
-    processServerXml(File serverXml)
+    processServerXml(File serverXml)            // conf/server.xml
     processServerXml(File serverXml, String contextName)
     processServerXml(File serverXml, String engineName, String hostName, String contextName)
     
-    processContextXml(File contextXml)
+    processContextXml(File contextXml)          // conf/context.xml, context.xml.default, META-INF/context.xml or conf/Catalina/localhost/[context_name].xml
     
-    processDefaultWebXml(File defaultWebXml)
-    processHostWebXml(File hostWebXml)
-    processWebXml(File webXml)
+    processDefaultWebXml(File defaultWebXml)    // conf/web.xml
+    processHostWebXml(File hostWebXml)          // web.xml.default
+    processWebXml(File webXml)                  // WEB-INF/web.xml or conf/Catalina/localhost/[context_name].xml
 
 
 All these methods are well documented on the class. 
