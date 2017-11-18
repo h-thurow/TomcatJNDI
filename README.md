@@ -4,9 +4,9 @@ Use classes dependent on Tomcat's JNDI environment outside of Tomcat.
 
 The most common use case is the DataSouce, you configured within e. g. context.xml to access it via JNDI lookup. But it is not limited to DataSources. Instead TomcatJNDI will provide you with any JNDI based resource you configured within Tomcat. Just point TomcatJNDI at the configuration files to process.
 
-Admittedly TomcatJNDI does less more than a little bit of configuration. All the magic comes from Tomcat's JNDI system itself.
+Admittedly TomcatJNDI does less more than a little bit of configuration. All the magic comes from Tomcat's JNDI system itself. TomcatJNDI is based on embedded Tomcat but initializes only Tomcat's JNDI environment without starting a server. So you can access all your resources as configured in Tomcat's configuration files in tests or from within any Java SE application.
 
-### Download
+## Download
 
     <dependency>
         <groupId>com.github.h-thurow</groupId>
@@ -16,7 +16,7 @@ Admittedly TomcatJNDI does less more than a little bit of configuration. All the
     
 or <a href=http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.h-thurow%22%20AND%20a%3A%22TomcatJNDI%22>download from here</a>.
 
-### How to use
+## How to use
 
 TomcatJNDI's API is simple. There are some process* Methods for the different configuration files:
 
@@ -54,7 +54,7 @@ When using TomcatJNDI in unit tests call
 
 after every test to clear the environment before executing the following test.
 
-### Only interested in a DataSource?
+## Only interested in a DataSource?
 
 Store a file named context.xml containing
 
@@ -90,14 +90,14 @@ Access the DataSource
     
 Note that you have to lookup the DataSource under "java:comp/env/...".
 
-### Known to be working so far
+## Known to be working so far
 
 |  | Element | Tested with |
 | :---| :---| :---|
 | server.xml | GlobalNamingResources/Resource | DataSource, JavaBean, UserDatabase
 | | Host/Context/Environment | Boxed primitives
 | | Host/Context/Ejb | EJB
-| context.xml | Context/Resource | DataSource, JavaBean, javax.mail.Session
+| context.xml | Context/Resource | DataSource, JavaBean, JavaMail Session
 | | Context/ResourceLink | DataSource, JavaBean, UserDatabase
 | | Context/Environment | Boxed primitives
 | | Context/Ejb | EJB
