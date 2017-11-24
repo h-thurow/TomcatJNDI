@@ -19,15 +19,16 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
-/**
+/*
  * TODO Ensure correct files are provided to {@link #processDefaultWebXml(File)}, {@link #processHostWebXml(File)}, {@link #processServerXml(File)}, {@link #processWebXml(File)} and {@link #processContextXml(File)}.<br>
  * TODO Ensure correct order: server.xml > context xml files > web xml files.<br>
- * TODO Host/Context/Resource<br>
- * TODO UserTransaction<br>
+ * TODO Host/Context/Resource with DataSource, JavaBean, JavaMail Session.<br>
+ * TODO UserTransaction with true JTA Provider.<br>
  * TODO message-destination (web.xml)<br>
  * TODO Web fragment support<br>
  * TODO Test all factories in org.apache.naming.factory, e. g. SendMailFactory etc.
- *
+ */
+/**
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 29.07.17
  */

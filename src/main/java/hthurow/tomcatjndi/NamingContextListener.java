@@ -11,7 +11,7 @@ import javax.management.ObjectName;
  * @author Holger Thurow (thurow.h@gmail.com)
  * @since 26.07.17
  */
-public class NamingContextListener extends org.apache.catalina.core.NamingContextListener {
+class NamingContextListener extends org.apache.catalina.core.NamingContextListener {
 
     @Override
     public void lifecycleEvent(LifecycleEvent event) {
@@ -25,20 +25,20 @@ public class NamingContextListener extends org.apache.catalina.core.NamingContex
 
     }
 
-    /**
+    /*
      *
      * TODO Only called in case of a DataSource?
      * TODO Reconsider building of ObjectName.
-     * <p>
+     *
      * Sonst "Failed to register in JMX: javax.management.RuntimeOperationsException: Object name cannot be null"
-     * <pre>
+     *
      Jul 24, 2017 7:28:36 AM org.apache.tomcat.util.modeler.Registry registerComponent
      SEVERE: Error registering null
      javax.management.RuntimeOperationsException: Object name cannot be null
      ...
      Jul 24, 2017 7:28:36 AM org.apache.catalina.core.NamingContextListener addResource
      WARNING: Failed to register in JMX: javax.management.RuntimeOperationsException: Object name cannot be null
-     * </pre>
+     *
      */
     @Override
     protected ObjectName createObjectName(ContextResource resource) throws MalformedObjectNameException {
