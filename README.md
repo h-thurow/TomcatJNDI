@@ -6,6 +6,8 @@ Admittedly TomcatJNDI does less more than a little bit of configuration. All the
 
 ## Download
 
+Up to Tomcat 7:
+
     <dependency>
         <groupId>com.github.h-thurow</groupId>
         <artifactId>TomcatJNDI</artifactId>
