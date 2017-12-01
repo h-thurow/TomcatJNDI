@@ -27,7 +27,6 @@ import java.util.Objects;
  * TODO message-destination (web.xml)<br>
  * TODO Web fragment support<br>
  * TODO Test all factories in org.apache.naming.factory, e. g. SendMailFactory etc.
- * TODO "Please note that JNDI resource configuration changed somewhat between Tomcat 7.x and Tomcat 8.x as they are using different versions of Apache Commons DBCP library. You will most likely need to modify older JNDI resource configurations to match the syntax in the example below in order to make them work in Tomcat 8". See http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html.
  */
 /**
  * @author Holger Thurow (thurow.h@gmail.com)
