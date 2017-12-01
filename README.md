@@ -1,4 +1,4 @@
-# TomcatJNDI - Test classes dependent on Tomcat's JNDI environment (e. g. Data Source) outside of Tomcat
+# TomcatJNDI - Test DataSource and classes dependent on Tomcat's JNDI environment outside of Tomcat
 
 The most common use case is the DataSouce, you configured within e. g. context.xml to access it via JNDI lookup. But it is not limited to DataSources. Instead TomcatJNDI will provide you with any JNDI based resource you configured within Tomcat. Just point TomcatJNDI at the configuration files to process.
 
