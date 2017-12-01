@@ -4,11 +4,11 @@ import org.apache.catalina.Lifecycle;
 import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.Server;
 import org.apache.catalina.core.*;
-import org.apache.catalina.deploy.*;
+import org.apache.catalina.deploy.NamingResourcesImpl;
 import org.apache.catalina.startup.Catalina;
 import org.apache.catalina.startup.ContextRuleSet;
 import org.apache.catalina.startup.NamingRuleSet;
-import org.apache.catalina.startup.WebRuleSet;
+import org.apache.tomcat.util.descriptor.web.*;
 import org.apache.tomcat.util.digester.Digester;
 import org.xml.sax.SAXException;
 
@@ -36,7 +36,7 @@ import java.util.Objects;
 public class TomcatJNDI {
 
     private static final String URL_PKG_PREFIX = "org.apache.naming";
-    private NamingResources namingResources;
+    private NamingResourcesImpl namingResources;
     private org.apache.catalina.core.NamingContextListener namingContextListener;
     private Server server;
     private StandardContext standardContext;
@@ -79,7 +79,7 @@ See also javax.naming.spi.NamingManager.getURLContext() */
             }
             service.setServer(server);
             standardEngine.setService(service);
-            namingResources = new NamingResources();
+            namingResources = new NamingResourcesImpl();
             standardContext.setNamingResources(namingResources);
             namingContextListener = new NamingContextListener();
             namingContextListener.setName("TomcatJNDI");
@@ -142,7 +142,7 @@ See also javax.naming.spi.NamingManager.getURLContext() */
     }
 
     private void initializeGlobalNamingContext() {
-        NamingResources globalNamingResources = server.getGlobalNamingResources();
+        NamingResourcesImpl globalNamingResources = server.getGlobalNamingResources();
         globalNamingContextListener = new NamingContextListener();
         globalNamingResources.addPropertyChangeListener(globalNamingContextListener);
         globalNamingContextListener.setName("TomcatJNDIServer");

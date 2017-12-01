@@ -1,6 +1,6 @@
 package hthurow.tomcatjndi;
 
-import org.apache.catalina.Container;
+import org.apache.catalina.Context;
 
 import java.beans.PropertyChangeListener;
 
@@ -9,6 +9,8 @@ import java.beans.PropertyChangeListener;
  * @since 10.09.17
  */
 class Loader implements org.apache.catalina.Loader {
+    private Context context;
+
     @Override
     public void backgroundProcess() {
 
@@ -20,13 +22,13 @@ class Loader implements org.apache.catalina.Loader {
     }
 
     @Override
-    public Container getContainer() {
-        return null;
+    public Context getContext() {
+        return context;
     }
 
     @Override
-    public void setContainer(Container container) {
-
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -37,11 +39,6 @@ class Loader implements org.apache.catalina.Loader {
     @Override
     public void setDelegate(boolean delegate) {
 
-    }
-
-    @Override
-    public String getInfo() {
-        return null;
     }
 
     @Override
@@ -59,12 +56,6 @@ class Loader implements org.apache.catalina.Loader {
 
     }
 
-    @Override
-    public void addRepository(String repository) {
-
-    }
-
-    @Override
     public String[] findRepositories() {
         return new String[0];
     }
