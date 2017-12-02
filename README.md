@@ -1,10 +1,12 @@
-# TomcatJNDI - Test classes dependent on Tomcat's JNDI environment (e. g. Data Source) outside of Tomcat
+# TomcatJNDI - Test DataSource and classes dependent on Tomcat's JNDI environment outside of Tomcat
 
 The most common use case is the DataSouce, you configured within e. g. context.xml to access it via JNDI lookup. But it is not limited to DataSources. Instead TomcatJNDI will provide you with any JNDI based resource you configured within Tomcat. Just point TomcatJNDI at the configuration files to process.
 
 Admittedly TomcatJNDI does less more than a little bit of configuration. All the magic comes from Tomcat's JNDI system itself. TomcatJNDI is based on embedded Tomcat but initializes only Tomcat's JNDI environment without starting a server. So you can access all your resources as configured in Tomcat's configuration files in tests or from within any Java SE application.
 
 ## Download
+
+Up to Tomcat 7:
 
     <dependency>
         <groupId>com.github.h-thurow</groupId>
@@ -13,6 +15,16 @@ Admittedly TomcatJNDI does less more than a little bit of configuration. All the
     </dependency>
     
 or <a href=http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.h-thurow%22%20AND%20a%3A%22TomcatJNDI%22>download from here</a>.
+
+Tomcat 8:
+
+    <dependency>
+        <groupId>com.github.h-thurow</groupId>
+        <artifactId>tomcat8jndi</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+    
+or <a href=http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.h-thurow%22%20AND%20a%3A%22tomcat8jndi%22>download from here</a>.
 
 ## How to use
 
@@ -73,6 +85,7 @@ Load this additional dependency
     <dependency>
         <groupId>org.apache.tomcat</groupId>
         <artifactId>tomcat-dbcp</artifactId>
+        <!-- 7.0.79 | 8.0.47 -->
         <version>7.0.79</version>
     </dependency> 
 
