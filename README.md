@@ -1,8 +1,8 @@
 # TomcatJNDI - Test DataSource and classes dependent on Tomcat's JNDI environment outside of Tomcat
 
-The most common use case is the DataSouce, you configured within e. g. context.xml to access it via JNDI lookup. But it is not limited to DataSources. Instead TomcatJNDI will provide you with any JNDI based resource you configured within Tomcat. Just point TomcatJNDI at the configuration files to process.
+A common problem when testing classes normally running within Tomcat is that they do some JNDI lookups to access objects stored as environment resources by Tomcat. But when testing those classes outside of Tomcat the JNDI environment does not exist. This is where TomcatJNDI comes into play. It will provide you with any JNDI based resource you configured within Tomcat. Just point it at the configuration files to process.
 
-Admittedly TomcatJNDI does less more than a little bit of configuration. All the magic comes from Tomcat's JNDI system itself. TomcatJNDI is based on embedded Tomcat but initializes only Tomcat's JNDI environment without starting a server. So you can access all your resources as configured in Tomcat's configuration files in tests or from within any Java SE application.
+Admittedly it does less more than a little bit of configuration. All the magic comes from Tomcat's JNDI system itself. TomcatJNDI is based on embedded Tomcat but initializes only Tomcat's JNDI environment without starting a server. So you can access all your resources as configured in Tomcat's configuration files in tests or from within any Java SE application.
 
 ## Download
 
