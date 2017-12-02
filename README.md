@@ -85,6 +85,7 @@ Load this additional dependency
     <dependency>
         <groupId>org.apache.tomcat</groupId>
         <artifactId>tomcat-dbcp</artifactId>
+        <!-- 7.0.79 | 8.0.47 -->
         <version>7.0.79</version>
     </dependency> 
 
