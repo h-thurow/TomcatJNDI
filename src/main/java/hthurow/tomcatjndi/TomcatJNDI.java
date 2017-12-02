@@ -263,6 +263,7 @@ See also javax.naming.spi.NamingManager.getURLContext() */
         namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_START_EVENT, null));
     }
 
+    // TODO restore URL_PKG_PREFIXES
     public void tearDown() {
         if (namingContextListener != null) {
             namingContextListener.lifecycleEvent(new LifecycleEvent(standardContext, Lifecycle.CONFIGURE_STOP_EVENT, null));

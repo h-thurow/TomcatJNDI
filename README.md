@@ -16,6 +16,16 @@ Up to Tomcat 7:
     
 or <a href=http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.h-thurow%22%20AND%20a%3A%22TomcatJNDI%22>download from here</a>.
 
+Tomcat 8:
+
+    <dependency>
+        <groupId>com.github.h-thurow</groupId>
+        <artifactId>tomcat8jndi</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+    
+or <a href=http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.github.h-thurow%22%20AND%20a%3A%22tomcat8jndi%22>download from here</a>.
+
 ## How to use
 
 TomcatJNDI's API is simple. There are some process* Methods for the different configuration files:
