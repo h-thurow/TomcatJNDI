@@ -60,7 +60,7 @@ Say you have configured some env-entry elements in WEB-INF/web.xml and a DataSou
 
 When using TomcatJNDI in unit tests call
 
-    tearDown()
+    tomcatJNDI.tearDown()
 
 after every test to clear the environment before executing the following test.
 
