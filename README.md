@@ -38,7 +38,7 @@ TomcatJNDI's API is simple. There are some process* Methods for the different co
     
     processDefaultWebXml(File defaultWebXml)    // conf/web.xml
     processHostWebXml(File hostWebXml)          // web.xml.default
-    processWebXml(File webXml)                  // WEB-INF/web.xml or conf/Catalina/localhost/[context_name].xml
+    processWebXml(File webXml)                  // WEB-INF/web.xml
 
 
 All these methods are well documented on the class. 
